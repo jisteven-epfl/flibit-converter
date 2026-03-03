@@ -1,4 +1,6 @@
 import { useState } from "react";
+import InputArea from "./InputArea";
+import BitDisplay from "./BitDisplay";
 
 function App() {
   const bitsLength = 8;
@@ -69,86 +71,19 @@ function App() {
       >
         Online Binary Converter
       </p>
-      <div className="mx-2 my-4">
-        <label
-          htmlFor="decimal-input"
-          className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
-        >
-          Decimal Value
-        </label>
-        <input
-          type="number"
-          step="1"
-          value={inputNumber}
-          onKeyDown={(e) => {
-            if ([".", "e", "E", "-", "+"].includes(e.key)) {
-              e.preventDefault();
-            }
-          }}
-          max={maxInputNumber}
-          min={0}
-          onChange={handleInput}
-          placeholder="Type an integer from 0 to 255…"
-          id="decimal-input"
-          name="decimal"
-          className="
-          w-full
-          py-2
-          px-2
-          border
-          rounded-lg
-          focus:ring-2
-          focus:ring-blue-300
-          focus:border-transparent
-          focus:outline-none
-          transition-all"
-        />
-      </div>
-      <div
-        className="
-          w-full
-          px-2"
-      >
-        <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">
-          Binary Conversion result:
-          {
-            <span className="ml-2 text-red-400 normal-case font-normal italic">
-              {getErrorMessage()}
-            </span>
-          }
-        </p>
-        <ol className="flex flex-wrap gap-2 list-none p-0 select-none">
-          {binaryArray.map((bit, i) => {
-            const bitId = `bit-${bitsLength - i}`;
 
-            return (
-              <li key={i} className="flex flex-col items-center gap-1">
-                <button
-                  id={bitId}
-                  onClick={() => handleClick(i)}
-                  className={`
-                  w-12 h-12
-                  flex items-center justify-center
-                  rounded-lg font-mono font-bold transition-all
-                  border-none 
-                  outline-none
-                  cursor-pointer
-                  active:scale-95
-                  ${bit === 1 ? "bg-blue-300 text-white" : "bg-slate-100 text-slate-400"}`}
-                >
-                  {bit}
-                </button>
-                <label
-                  htmlFor={bitId}
-                  className="text-[10px] font-mono text-slate-400 cursor-pointer select-none"
-                >
-                  {bitsLength - i}
-                </label>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
+      <InputArea
+        inputNumber={inputNumber}
+        onInputChange={handleInput}
+        maxInputNumber={maxInputNumber}
+      />
+
+      <BitDisplay
+        binaryArray={binaryArray}
+        onBitClick={handleClick}
+        errorMessage={getErrorMessage()}
+        bitsLength={bitsLength}
+      />
     </div>
   );
 }

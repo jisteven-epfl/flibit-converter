@@ -43,20 +43,12 @@ function App() {
     return bits;
   }
 
-  const getErrorMessage = () => {
-    switch (true) {
-      case isInputEmpty:
-        return "empty input";
-      case isInputNoneInteger:
-        return "input is not integer";
-      case isInputTooBig:
-        return "input is too big too handle";
-      case isTooBigToConvert:
-        return `input is too big too display, only took ${bitsLength} LSB`;
-      default:
-        return "";
-    }
-  };
+  const getErrorMessage = 
+    isInputEmpty ? "empty input" :
+    isInputNoneInteger ? "input is not integer" :
+    isInputTooBig ? "input is too big too handle" :
+    isTooBigToConvert ? `input is too big too display, only took ${bitsLength} LSB` :
+    "";
 
   /////////////////////// Actual Body /////////////////////////////////
 
@@ -87,7 +79,7 @@ function App() {
       <BitDisplay
         binaryArray={binaryArray}
         onBitClick={handleClick}
-        errorMessage={getErrorMessage()}
+        errorMessage={getErrorMessage}
         bitsLength={bitsLength}
       />
     </div>

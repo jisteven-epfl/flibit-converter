@@ -4,12 +4,18 @@ interface InputAreaProps {
     inputNumber: number | "";
     onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     maxInputNumber: number;
+    minInputNumber: number;
+    maxConvertNumber: number;
+    minConvertNumber: number;
 }
 
 const InputArea: React.FC<InputAreaProps> = ({
     inputNumber,
     onInputChange,
     maxInputNumber,
+    minInputNumber,
+    maxConvertNumber,
+    minConvertNumber,
 }) => {
     return (
         <div className="mx-2 my-4">
@@ -24,14 +30,14 @@ const InputArea: React.FC<InputAreaProps> = ({
                 step="1"
                 value={inputNumber}
                 onKeyDown={(e) => {
-                    if ([".", "e", "E", "-", "+"].includes(e.key)) {
+                    if ([".", "e", "E", "+"].includes(e.key)) {
                         e.preventDefault();
                     }
                 }}
                 max={maxInputNumber}
-                min={0}
+                min={minInputNumber}
                 onChange={onInputChange}
-                placeholder="Type an integer from 0 to 255…"
+                placeholder={`Type an integer from ${minConvertNumber} to ${maxConvertNumber}`}
                 id="decimal-input"
                 name="decimal"
                 className="

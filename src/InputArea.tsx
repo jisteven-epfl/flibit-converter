@@ -17,14 +17,31 @@ const InputArea: React.FC<InputAreaProps> = ({
     maxConvertNumber,
     minConvertNumber,
 }) => {
+    const [copied, setCopied] = React.useState(false);
+
+    const handleCopy = () => {
+        if (inputNumber === "") return;
+        navigator.clipboard.writeText(inputNumber.toString());
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
     return (
         <div className="mx-2 my-2">
-            <label
-                htmlFor="decimal-input"
-                className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
-            >
-                Decimal Value
-            </label>
+            <div className="flex justify-between items-center mb-1">
+                <label
+                    htmlFor="decimal-input"
+                    className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
+                >
+                    Decimal Value
+                </label>
+                <button
+                    onClick={handleCopy}
+                    className="text-[10px] font-bold text-blue-400 hover:text-blue-500 transition-colors uppercase tracking-tight cursor-pointer"
+                >
+                    {copied ? "✓ Copied!" : "Copy"}
+                </button>
+            </div>
             <input
                 type="number"
                 step="1"

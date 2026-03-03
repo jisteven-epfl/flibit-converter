@@ -13,6 +13,15 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
     errorMessage,
     bitsLength,
 }) => {
+    const [copied, setCopied] = React.useState(false);
+
+    const handleCopyBinary = () => {
+        const binaryString = binaryArray.join("");
+        navigator.clipboard.writeText(binaryString);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
     const chunks = [];
     for (let i = 0; i < binaryArray.length; i += 8) {
         chunks.push(binaryArray.slice(i, i + 8));
@@ -21,12 +30,20 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
 
     return (
         <div className="w-full px-2">
-            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">
-                Binary Conversion result:
-                <span className="ml-2 text-red-400 normal-case font-normal italic">
-                    {errorMessage}
-                </span>
-            </p>
+            <div className="flex justify-between items-center mb-2">
+                <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                    Binary Result
+                    <span className="ml-2 text-red-400 normal-case font-normal italic text-[10px]">
+                        {errorMessage}
+                    </span>
+                </p>
+                <button
+                    onClick={handleCopyBinary}
+                    className="text-[10px] font-bold text-blue-400 hover:text-blue-500 transition-colors uppercase tracking-tight cursor-pointer"
+                >
+                    {copied ? "✓ Copied!" : "Copy Bits"}
+                </button>
+            </div>
 
             <div className="flex flex-col gap-6 select-none">
                 {chunks.map((chunk, chunkIndex) => (
@@ -38,7 +55,7 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
                             </span>
                         )}
 
-                        <ol className="flex flex-nowrap gap-1 sm:gap-2 list-none p-0 w-full">
+                        <ol className="flex flex-nowrap justify-center gap-1 sm:gap-2 list-none p-0 w-full">
                             {chunk.map((bit, i) => {
                                 // 计算在原始数组中的真实索引
                                 const originalIndex = chunkIndex * 8 + i;

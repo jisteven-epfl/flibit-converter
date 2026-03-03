@@ -6,10 +6,10 @@ function App() {
   const maxInputNumber = Number.MAX_SAFE_INTEGER;
 
   const [inputNumber, setInputNumber] = useState<number | "">("");
-  const [isInputEmpty, setIsInputEmpty] = useState(false);
-  const [isInputNoneInteger, setIsInputNoneInteger] = useState(false);
-  const [isInputTooBig, setIsInputTooBig] = useState(false);
-  const [isTooBigToConvert, setTooBigToConvert] = useState(false);
+  const isInputEmpty = inputNumber === "";
+  const isInputNoneInteger = !Number.isInteger(inputNumber);
+  const isInputTooBig = !isInputEmpty && inputNumber > maxInputNumber;
+  const isTooBigToConvert = !isInputEmpty && inputNumber > maxConvertNumber;
   const isInputValid = !(isInputEmpty || isInputNoneInteger || isInputTooBig);
   const binaryArray = toBinary(isInputValid ? (inputNumber as number) : 0);
 
@@ -18,25 +18,6 @@ function App() {
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     const newValueAsNumber = Number(newValue);
-    resetError();
-    if (newValue === "") {
-      setIsInputEmpty(true);
-      setInputNumber("");
-      return;
-    }
-    if (!Number.isInteger(newValueAsNumber)) {
-      setIsInputNoneInteger(true);
-      return;
-    }
-    if (!(newValueAsNumber <= maxInputNumber)) {
-      setIsInputTooBig(true);
-      return;
-    }
-    if (!(newValueAsNumber <= maxConvertNumber)) {
-      setTooBigToConvert(true);
-    } else {
-      setTooBigToConvert(false);
-    }
     setInputNumber(newValueAsNumber);
   };
 
@@ -46,18 +27,10 @@ function App() {
     newArray[id] = binaryArray[id] ^ 1;
 
     const newNumber = newArray.reduce((acc, bit) => (acc << 1) | bit, 0);
-    resetError();
     setInputNumber(newNumber);
   }
 
   /////////////////////// Helper functions /////////////////////////////////
-
-  function resetError() {
-    setIsInputEmpty(false);
-    setIsInputNoneInteger(false);
-    setIsInputTooBig(false);
-    setTooBigToConvert(false);
-  }
 
   function toBinary(n: number): Array<number> {
     const bits = Array.from({ length: bitsLength }, (_, i) => {

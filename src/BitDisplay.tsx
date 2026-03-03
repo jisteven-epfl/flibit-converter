@@ -13,6 +13,12 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
     errorMessage,
     bitsLength,
 }) => {
+    const chunks = [];
+    for (let i = 0; i < binaryArray.length; i += 8) {
+        chunks.push(binaryArray.slice(i, i + 8));
+    }
+
+
     return (
         <div className="w-full px-2">
             <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">
@@ -21,7 +27,37 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
                     {errorMessage}
                 </span>
             </p>
-            <ol className="flex flex-wrap gap-2 list-none p-0 select-none">
+
+            <div className="flex flex-col gap-6 select-none">
+                {chunks.map((chunk, chunkIndex) => (
+                <div key={chunkIndex} className="flex flex-col gap-2">
+                    {/* 组标签：可选，显示这是第几组（LSB/MSB） */}
+                    {chunks.length > 1 && (
+                    <span className="text-[10px] text-slate-400 font-bold uppercase">
+                        Byte {chunks.length - 1 - chunkIndex} ({8 * (chunks.length - 1 - chunkIndex) + 7} - {8 * (chunks.length - 1 - chunkIndex)})
+                    </span>
+                    )}
+                    
+                    <ol className="flex flex-wrap gap-2 list-none p-0">
+                    {chunk.map((bit, i) => {
+                        // 计算在原始数组中的真实索引
+                        const originalIndex = chunkIndex * 8 + i;
+                        return (
+                        <BitButton
+                            key={originalIndex}
+                            bit={bit}
+                            index={originalIndex}
+                            totalBits={bitsLength}
+                            onClick={() => onBitClick(originalIndex)}
+                        />
+                        );
+                    })}
+                    </ol>
+                </div>
+                ))}
+            </div>
+
+            {/* <ol className="flex flex-wrap gap-2 list-none p-0 select-none">
                 {binaryArray.map((bit, i) => (
                     <BitButton
                         key={i}
@@ -31,7 +67,7 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
                         onClick={() => onBitClick(i)}
                     />
                 ))}
-            </ol>
+            </ol> */}
         </div>
     );
 };
@@ -49,7 +85,7 @@ const BitButton: React.FC<BitButtonProps> = ({
     totalBits,
     onClick,
 }) => {
-    const bitId = `bit-${totalBits - index}`;
+    const bitId = `bit-${totalBits - index - 1}`;
 
     return (
         <li className="flex flex-col items-center gap-1">
@@ -72,7 +108,7 @@ const BitButton: React.FC<BitButtonProps> = ({
                 htmlFor={bitId}
                 className="text-[10px] font-mono text-slate-400 cursor-pointer select-none"
             >
-                {totalBits - index}
+                {totalBits - index - 1}
             </label>
         </li>
     );

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import InputArea from "./InputArea";
 import BitDisplay from "./BitDisplay";
+import ConvertModeButton from "./ConvertModeButton";
 
 function App() {
-  const bitsLength = 8;
+  const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
   const maxConvertNumber = Math.pow(2, bitsLength) - 1;
   const maxInputNumber = Number.MAX_SAFE_INTEGER;
 
@@ -76,6 +77,11 @@ function App() {
         inputNumber={inputNumber}
         onInputChange={handleInput}
         maxInputNumber={maxInputNumber}
+      />
+
+      <ConvertModeButton
+        currentMode={bitsLength}
+        onModeChange={setBitsLength}
       />
 
       <BitDisplay

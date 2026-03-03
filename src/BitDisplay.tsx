@@ -45,6 +45,10 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
                 </button>
             </div>
 
+            <p className="text-[10px] text-slate-400 font-medium mb-3 -mt-1 italic">
+                ✨ Tip: Click or swipe across bits to toggle them
+            </p>
+
             <div className="flex flex-col gap-6 select-none">
                 {chunks.map((chunk, chunkIndex) => (
                     <div key={chunkIndex} className="flex flex-col gap-2">
@@ -96,7 +100,16 @@ const BitButton: React.FC<BitButtonProps> = ({
         <li className="flex-1 flex flex-col items-center gap-1 max-w-[48px]">
             <button
                 id={bitId}
-                onClick={onClick}
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    onClick();
+                }}
+                onMouseEnter={(e) => {
+                    if (e.buttons === 1) {
+                        onClick();
+                    }
+                }}
+                onDragStart={(e) => e.preventDefault()}
                 className={`
           w-full aspect-square
           flex items-center justify-center

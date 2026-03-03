@@ -18,7 +18,7 @@ const InputArea: React.FC<InputAreaProps> = ({
     minConvertNumber,
 }) => {
     return (
-        <div className="mx-2 my-4">
+        <div className="mx-2 my-2">
             <label
                 htmlFor="decimal-input"
                 className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
@@ -42,8 +42,10 @@ const InputArea: React.FC<InputAreaProps> = ({
                 name="decimal"
                 className="
           w-full
+          min-w-0
           py-2
           px-2
+          text-lg
           border
           rounded-lg
           focus:ring-2

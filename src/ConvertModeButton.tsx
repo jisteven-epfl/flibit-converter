@@ -14,7 +14,7 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
     onSignedChange,
 }) => {
     return (
-        <div className="flex flex-col gap-3 mx-2 my-4 p-2 bg-slate-50 rounded-xl">
+        <div className="flex flex-col gap-3 mx-2 p-2 bg-slate-50 rounded-xl">
              <div className="flex items-center gap-4">
                 <span className="text-[10px] font-black text-slate-400 uppercase w-10">Width</span>
                 <div className="flex gap-2">

@@ -47,8 +47,10 @@ function App() {
       inputNumber === "" ? Array(bitsLength).fill(0) : [...binaryArray];
     newArray[id] = binaryArray[id] ^ 1;
 
-    let newNumber = newArray.reduce((acc, bit) => (acc << 1) | bit, 0);
+    // Use mathematical operations instead of bitwise to avoid JS 32-bit signed integer limits
+    let newNumber = newArray.reduce((acc, bit) => (acc * 2) + bit, 0);
 
+    // In signed mode, interpret the most significant bit (MSB) as negative weight
     if (isSigned && newArray[0] === 1) {
       newNumber = newNumber - Math.pow(2, bitsLength);
     }
@@ -86,7 +88,7 @@ function App() {
           </h1>
           <p className="text-center text-blue-50/80 text-sm mt-2 font-medium tracking-wide">
             A simple binary converter that let's you <span className="text-white underline decoration-blue-200 underline-offset-4">directly play</span> with bits.
-  </p>
+          </p>
         </div>
 
         <div className="p-6 flex flex-col gap-2">
@@ -120,9 +122,9 @@ function App() {
       <footer className="mt-12 flex flex-col items-center gap-2">
         <div className="flex items-center gap-3">
           <div className="h-px w-8 bg-slate-300" />
-          <a 
-            href="https://github.com/jisteven-epfl/flibit-converter" 
-            target="_blank" 
+          <a
+            href="https://github.com/jisteven-epfl/flibit-converter"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-slate-400 text-[10px] font-mono tracking-wider uppercase hover:text-blue-400 transition-colors"
           >

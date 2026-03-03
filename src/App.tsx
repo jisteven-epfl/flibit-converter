@@ -91,6 +91,11 @@ function App() {
           </p>
         </div>
 
+        {/* hidden span for screen readers to announce errors immediately */}
+        <span role="alert" aria-live="polite" className="sr-only">
+          {getErrorMessage}
+        </span>
+
         <div className="p-6 flex flex-col gap-2">
           <InputArea
             inputNumber={inputNumber}

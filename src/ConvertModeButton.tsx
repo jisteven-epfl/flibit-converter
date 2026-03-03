@@ -15,32 +15,37 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
 }) => {
     return (
         <div className="flex flex-col gap-3 mx-2 p-2 bg-slate-50 rounded-xl">
-             <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
                 <span className="text-[10px] font-black text-slate-400 uppercase w-10">Width</span>
                 <div className="flex gap-2">
                     {[8, 16, 32].map(mode => (
-                    <button 
-                        key={mode}
-                        onClick={() => onModeChange(mode as 8 | 16 | 32)}
-                        className={`px-3 py-1 rounded ${currentMode === mode ? 'bg-blue-300 text-white' : 'bg-white'}`}
-                    >
-                        {mode}-bit
-                    </button>
+                        <button
+                            key={mode}
+                            aria-pressed={currentMode === mode}
+                            onClick={() => onModeChange(mode as 8 | 16 | 32)}
+                            className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${currentMode === mode ? 'bg-blue-300 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100'
+                                }`}
+                        >
+                            {mode}-bit
+                        </button>
                     ))}
                 </div>
             </div>
 
+            {/* 第二行：符号模式选择 */}
             <div className="flex items-center gap-4">
                 <span className="text-[10px] font-black text-slate-400 uppercase w-10">Type</span>
                 <div className="flex gap-2">
-                    {["signed", "unsigned"].map(mode => (
-                    <button
-                        key={mode}
-                        onClick={() => onSignedChange(mode === "signed")}
-                        className={`px-3 py-1 rounded ${isSigned === (mode === "signed") ? 'bg-blue-300 text-white' : 'bg-white'}`}
-                    >
-                        {mode}
-                    </button>
+                    {["unsigned", "signed"].map(mode => (
+                        <button
+                            key={mode}
+                            aria-pressed={isSigned === (mode === "signed")}
+                            onClick={() => onSignedChange(mode === "signed")}
+                            className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${isSigned === (mode === "signed") ? 'bg-blue-300 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100'
+                                }`}
+                        >
+                            {mode}
+                        </button>
                     ))}
                 </div>
             </div>

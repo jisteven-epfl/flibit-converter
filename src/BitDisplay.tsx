@@ -31,7 +31,7 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
     return (
         <div className="w-full px-2">
             <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+                <p className="text-sm font-bold text-slate-500 uppercase tracking-wider" aria-hidden="true">
                     Binary Result
                     <span className="ml-2 text-red-400 normal-case font-normal italic text-[10px]">
                         {errorMessage}
@@ -100,12 +100,19 @@ const BitButton: React.FC<BitButtonProps> = ({
         <li className="flex-1 flex flex-col items-center gap-1 max-w-[48px]">
             <button
                 id={bitId}
+                aria-label={`Bit ${totalBits - index - 1}, value is ${bit}`}
                 onMouseDown={(e) => {
                     e.preventDefault();
                     onClick();
                 }}
                 onMouseEnter={(e) => {
                     if (e.buttons === 1) {
+                        onClick();
+                    }
+                }}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
                         onClick();
                     }
                 }}

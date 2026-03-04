@@ -1,42 +1,44 @@
 import { useState } from "react";
+import InputArea from "./InputArea";
+import BitDisplay from "./BitDisplay";
+import ConvertModeButton from "./ConvertModeButton";
 
 function App() {
-  const bitsLength = 8;
-  const maxConvertNumber = Math.pow(2, bitsLength) - 1;
+  const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
+  const [isSigned, setIsSigned] = useState<boolean>(false);
+
+  const minConvertNumber = isSigned ? -Math.pow(2, bitsLength - 1) : 0;
+  const maxConvertNumber = isSigned
+    ? Math.pow(2, bitsLength - 1) - 1
+    : Math.pow(2, bitsLength) - 1;
   const maxInputNumber = Number.MAX_SAFE_INTEGER;
+  const minInputNumber = Number.MIN_SAFE_INTEGER;
 
   const [inputNumber, setInputNumber] = useState<number | "">("");
-  const [isInputEmpty, setIsInputEmpty] = useState(false);
-  const [isInputNoneInteger, setIsInputNoneInteger] = useState(false);
-  const [isInputTooBig, setIsInputTooBig] = useState(false);
-  const [isTooBigToConvert, setTooBigToConvert] = useState(false);
-  const isInputValid = !(isInputEmpty || isInputNoneInteger || isInputTooBig);
-  const binaryArray = toBinary(isInputValid ? (inputNumber as number) : 0);
+  const isInputEmpty = inputNumber === "";
+  const isInputNoneInteger = !Number.isInteger(inputNumber);
+  const isInputTooBig = !isInputEmpty && inputNumber > maxInputNumber;
+  const isInputTooSmall = !isInputEmpty && inputNumber < minInputNumber;
+  const isTooBigToConvert = !isInputEmpty && inputNumber > maxConvertNumber;
+  const isTooSmallToConvert = !isInputEmpty && inputNumber < minConvertNumber;
+  const isInputParsable =
+    !(isInputEmpty ||
+      isInputNoneInteger ||
+      isInputTooBig ||
+      isInputTooSmall);
+  const binaryArray = toBinary(isInputParsable ? (inputNumber as number) : 0);
 
   /////////////////////// Handle interaction /////////////////////////////////
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    const newValueAsNumber = Number(newValue);
-    resetError();
+
     if (newValue === "") {
-      setIsInputEmpty(true);
       setInputNumber("");
       return;
     }
-    if (!Number.isInteger(newValueAsNumber)) {
-      setIsInputNoneInteger(true);
-      return;
-    }
-    if (!(newValueAsNumber <= maxInputNumber)) {
-      setIsInputTooBig(true);
-      return;
-    }
-    if (!(newValueAsNumber <= maxConvertNumber)) {
-      setTooBigToConvert(true);
-    } else {
-      setTooBigToConvert(false);
-    }
+
+    const newValueAsNumber = Number(newValue);
     setInputNumber(newValueAsNumber);
   };
 
@@ -45,138 +47,102 @@ function App() {
       inputNumber === "" ? Array(bitsLength).fill(0) : [...binaryArray];
     newArray[id] = binaryArray[id] ^ 1;
 
-    const newNumber = newArray.reduce((acc, bit) => (acc << 1) | bit, 0);
-    resetError();
+    // Use mathematical operations instead of bitwise to avoid JS 32-bit signed integer limits
+    let newNumber = newArray.reduce((acc, bit) => (acc * 2) + bit, 0);
+
+    // In signed mode, interpret the most significant bit (MSB) as negative weight
+    if (isSigned && newArray[0] === 1) {
+      newNumber = newNumber - Math.pow(2, bitsLength);
+    }
     setInputNumber(newNumber);
   }
 
   /////////////////////// Helper functions /////////////////////////////////
 
-  function resetError() {
-    setIsInputEmpty(false);
-    setIsInputNoneInteger(false);
-    setIsInputTooBig(false);
-    setTooBigToConvert(false);
-  }
-
   function toBinary(n: number): Array<number> {
     const bits = Array.from({ length: bitsLength }, (_, i) => {
       const shiftAmount = bitsLength - 1 - i;
-      return (n >> shiftAmount) & 1;
+      return (n >>> shiftAmount) & 1;
     });
     return bits;
   }
 
-  const getErrorMessage = () => {
-    switch (true) {
-      case isInputEmpty:
-        return "empty input";
-      case isInputNoneInteger:
-        return "input is not integer";
-      case isInputTooBig:
-        return "input is too big too handle";
-      case isTooBigToConvert:
-        return `input is too big too display, only took ${bitsLength} LSB`;
-      default:
-        return "";
-    }
-  };
+  const getErrorMessage =
+    isInputEmpty ? "Empty input." :
+      isInputNoneInteger ? "Input is not integer." :
+        isInputTooBig ? "Input is too big too handle." :
+          isInputTooSmall ? "Input is too small too handle." :
+            (!isSigned && (inputNumber as number) < 0) ? "Negative input: Displaying bits as interpreted by the hardware." :
+              isTooBigToConvert ? `Input is too big too display, only took ${bitsLength} LSB.` :
+                isTooSmallToConvert ? `Input is too small too display, only took ${bitsLength} LSB.` :
+                  "";
 
   /////////////////////// Actual Body /////////////////////////////////
 
   return (
-    <div>
-      <p
-        className="
-          w-full
-          py-4
-          text-center
-          font-bold
-          bg-blue-300"
-      >
-        Online Binary Converter
-      </p>
-      <div className="mx-2 my-4">
-        <label
-          htmlFor="decimal-input"
-          className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
-        >
-          Decimal Value
-        </label>
-        <input
-          type="number"
-          step="1"
-          value={inputNumber}
-          onKeyDown={(e) => {
-            if ([".", "e", "E", "-", "+"].includes(e.key)) {
-              e.preventDefault();
-            }
-          }}
-          max={maxInputNumber}
-          min={0}
-          onChange={handleInput}
-          placeholder="Type an integer from 0 to 255…"
-          id="decimal-input"
-          name="decimal"
-          className="
-          w-full
-          py-2
-          px-2
-          border
-          rounded-lg
-          focus:ring-2
-          focus:ring-blue-300
-          focus:border-transparent
-          focus:outline-none
-          transition-all"
-        />
-      </div>
-      <div
-        className="
-          w-full
-          px-2"
-      >
-        <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">
-          Binary Conversion result:
-          {
-            <span className="ml-2 text-red-400 normal-case font-normal italic">
-              {getErrorMessage()}
-            </span>
-          }
-        </p>
-        <ol className="flex flex-wrap gap-2 list-none p-0 select-none">
-          {binaryArray.map((bit, i) => {
-            const bitId = `bit-${bitsLength - i}`;
+    <div className="min-h-screen bg-slate-100 py-12 px-4 flex flex-col items-center">
+      <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl shadow-slate-200 overflow-hidden border border-slate-100">
+        <div className="bg-blue-300 py-6 px-4">
+          <h1 className="text-center font-black text-white text-xl uppercase tracking-widest">
+            Flibit Converter
+          </h1>
+          <p className="text-center text-blue-50/80 text-sm mt-2 font-medium tracking-wide">
+            A simple binary converter that lets you <span className="text-white underline decoration-blue-200 underline-offset-4">intuitively play</span> with bits.
+          </p>
+        </div>
 
-            return (
-              <li key={i} className="flex flex-col items-center gap-1">
-                <button
-                  id={bitId}
-                  onClick={() => handleClick(i)}
-                  className={`
-                  w-12 h-12
-                  flex items-center justify-center
-                  rounded-lg font-mono font-bold transition-all
-                  border-none 
-                  outline-none
-                  cursor-pointer
-                  active:scale-95
-                  ${bit === 1 ? "bg-blue-300 text-white" : "bg-slate-100 text-slate-400"}`}
-                >
-                  {bit}
-                </button>
-                <label
-                  htmlFor={bitId}
-                  className="text-[10px] font-mono text-slate-400 cursor-pointer select-none"
-                >
-                  {bitsLength - i}
-                </label>
-              </li>
-            );
-          })}
-        </ol>
+        {/* hidden span for screen readers to announce errors immediately */}
+        <span role="alert" aria-live="polite" className="sr-only">
+          {getErrorMessage}
+        </span>
+
+        <div className="p-6 flex flex-col gap-2">
+          <InputArea
+            inputNumber={inputNumber}
+            onInputChange={handleInput}
+            maxInputNumber={maxInputNumber}
+            minInputNumber={minInputNumber}
+            maxConvertNumber={maxConvertNumber}
+            minConvertNumber={minConvertNumber}
+          />
+
+          <ConvertModeButton
+            currentMode={bitsLength}
+            onModeChange={setBitsLength}
+            isSigned={isSigned}
+            onSignedChange={setIsSigned}
+          />
+
+          <div className="h-px bg-slate-100 my-4 mx-2" />
+
+          <BitDisplay
+            binaryArray={binaryArray}
+            onBitClick={handleClick}
+            errorMessage={getErrorMessage}
+            bitsLength={bitsLength}
+          />
+        </div>
       </div>
+
+      <footer className="mt-12 flex flex-col items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="h-px w-8 bg-slate-300" />
+          <a
+            href="https://github.com/jisteven-epfl/flibit-converter"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-400 text-[10px] font-mono tracking-wider uppercase hover:text-blue-400 transition-colors"
+          >
+            Open Source on GitHub
+          </a>
+          <div className="h-px w-8 bg-slate-300" />
+        </div>
+        <p className="text-slate-400 text-[10px] font-bold">
+          Built by <span className="text-blue-400">Steven Ji</span> using <span className="text-blue-400">Google Antigravity</span> 2026 // MIT License
+        </p>
+      </footer>
     </div>
+
   );
 }
 

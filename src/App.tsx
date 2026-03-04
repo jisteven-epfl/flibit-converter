@@ -87,7 +87,7 @@ function App() {
             Flibit Converter
           </h1>
           <p className="text-center text-blue-50/80 text-sm mt-2 font-medium tracking-wide">
-            A simple binary converter that let's you <span className="text-white underline decoration-blue-200 underline-offset-4">directly play</span> with bits.
+            A simple binary converter that let's you <span className="text-white underline decoration-blue-200 underline-offset-4">intuitively play</span> with bits.
           </p>
         </div>
 

@@ -113,8 +113,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Local learning progress
-LEARNING_PROGRESS.md
+
 .vscode
 
 # AI Context
@@ -129,10 +128,14 @@ LEARNING_PROGRESS.md
 # GitHub Copilot Instructions
 .github/copilot-instructions.md
 .DS_Store
-old_README.md
 
 # Vite / Local env files
 .env*.local
 .vite/
 # Windows
 Thumbs.db
+
+# Local files
+old_README.md
+ROADMAP_DEVOPS.md
+LEARNING_PROGRESS.md

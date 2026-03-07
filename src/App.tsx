@@ -2,6 +2,7 @@ import { useState } from "react";
 import InputArea from "./InputArea";
 import BitDisplay from "./BitDisplay";
 import ConvertModeButton from "./ConvertModeButton";
+import { FlipBitInteractive } from "./interactive_logo";
 
 function App() {
   const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
@@ -82,12 +83,15 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-100 py-12 px-4 flex flex-col items-center">
       <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl shadow-slate-200 overflow-hidden border border-slate-100">
-        <div className="bg-blue-300 py-6 px-4">
-          <h1 className="text-center font-black text-white text-xl uppercase tracking-widest">
-            Flibit Converter
-          </h1>
+        <div className="bg-blue-300 py-6 px-4 flex flex-col items-center">
+          <div className="flex items-center justify-center gap-3 ml-12">
+            <h1 className="font-black text-white text-xl uppercase tracking-widest mt-1">
+              Flibit Converter
+            </h1>
+            <FlipBitInteractive />
+          </div>
           <p className="text-center text-blue-50/80 text-sm mt-2 font-medium tracking-wide">
-            A simple binary converter that lets you <span className="text-white underline decoration-blue-200 underline-offset-4">intuitively play</span> with bits.
+            A simple binary converter that lets you intuitively <span className="text-white underline decoration-blue-200 underline-offset-4">play ↑</span> with bits.
           </p>
         </div>
 

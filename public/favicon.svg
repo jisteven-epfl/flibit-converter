@@ -1,0 +1,19 @@
+<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="6" y="10" width="108" height="148" rx="12" fill="#0f172a" opacity="0.2"/>
+  <rect x="6" y="6" width="108" height="148" rx="12" fill="white" stroke="#8ec5ff" stroke-width="12"/>
+  <rect x="12" y="24" width="96" height="124" rx="8" fill="#8ec5ff" fill-opacity="0.1"/>
+  <g fill="#8ec5ff">
+    <rect x="25" y="-2" width="10" height="40" rx="5" />
+    <rect x="45" y="-2" width="10" height="40" rx="5" />
+    <rect x="65" y="-2" width="10" height="40" rx="5" />
+    <rect x="85" y="-2" width="10" height="40" rx="5" />
+  </g>
+  <text x="60" y="118" text-anchor="middle" fill="#8ec5ff" font-size="88" font-weight="900" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">0</text>
+  <rect x="12" y="24" width="96" height="62" rx="8" fill="url(#shine)" opacity="0.3"/>
+  <defs>
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="1" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+</svg>

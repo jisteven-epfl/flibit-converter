@@ -43,18 +43,42 @@ function App() {
   };
 
   function handleClick(id: number) {
-    const newArray =
-      inputNumber === "" ? Array(bitsLength).fill(0) : [...binaryArray];
-    newArray[id] = binaryArray[id] ^ 1;
+    const position = bitsLength - 1 - id;
 
-    // Use mathematical operations instead of bitwise to avoid JS 32-bit signed integer limits
-    let newNumber = newArray.reduce((acc, bit) => (acc * 2) + bit, 0);
+    // For MSB in signed mode with addition architecture:
+    // If we click MSB (which acts as -128 in 8-bit), we ADD to the total value, and simulate unsigned hardware truncation.
+    // The previous implementation used bitwise toggling. To truly add, we treat the MSB positively (e.g. adding 128 to -128).
 
-    // In signed mode, interpret the most significant bit (MSB) as negative weight
-    if (isSigned && newArray[0] === 1) {
-      newNumber = newNumber - Math.pow(2, bitsLength);
+    // Normal mathematical addition logic for all bits
+    const addValue = Math.pow(2, position);
+    const currentValue = inputNumber === "" ? 0 : (inputNumber as number);
+
+    // If we're in signed mode, it's easiest to convert current value to its exact unsigned binary equivalent first
+    let unsignedCurrent = currentValue;
+    if (currentValue < 0) {
+      unsignedCurrent = currentValue + Math.pow(2, bitsLength);
     }
-    setInputNumber(newNumber);
+
+    // Perform pure unsigned addition
+    const rawNewNumber = unsignedCurrent + addValue;
+
+    // Simulate Hardware Truncation (ignore carry out) perfectly using BigInt masking
+    // Using BigInt avoids JS 32-bit bitwise limitations
+    const maxUnsigned = Math.pow(2, bitsLength);
+    const mask = BigInt(maxUnsigned) - 1n; // e.g. 255n for 8 bits
+    const truncatedNumber = Number(BigInt(rawNewNumber) & mask);
+
+    let finalNumber = truncatedNumber;
+
+    // Convert back to Signed representation if necessary
+    if (isSigned) {
+      const msbValue = Math.pow(2, bitsLength - 1);
+      if (truncatedNumber >= msbValue) {
+        finalNumber = truncatedNumber - maxUnsigned;
+      }
+    }
+
+    setInputNumber(finalNumber);
   }
 
   /////////////////////// Helper functions /////////////////////////////////
@@ -142,7 +166,6 @@ function App() {
         </p>
       </footer>
     </div>
-
   );
 }
 

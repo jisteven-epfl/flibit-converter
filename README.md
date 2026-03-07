@@ -1,4 +1,8 @@
-# Flibit Converter
+<div align="center">
+  <img src="./public/favicon.svg" alt="Flibit Logo" width="120" />
+</div>
+
+<h1 align="center">Flibit Converter</h1>
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -18,10 +22,15 @@
 
 **Flibit Converter** is an interactive web tool built to help you visualize, manipulate, and convert binary numbers. Designed with a focus on education and developer utility, it supports deep diving into bit-level operations with a modern UI.
 
+### 🎨 The "Flibit" Story
+
+The name **Flibit** comes from the term "bit flip" (a hardware phenomenon where a bit in memory spontaneously changes state, sometimes due to cosmic rays). By literally *flipping* the words to "flip bit" and merging them, we get Flibit—which also pleasantly sounds like "Flip it"! The app's overall design physically embodies this core concept, from its notebook flip-calendar logo to the interactive bit-flipping animations in the UI.
+
 ### ✨ Features
 
 - **8 / 16 / 32-Bit Modes**: Seamlessly switch between different bit lengths.
 - **Signed & Unsigned Support**: Real-time Two's Complement logic for signed integers.
+- **Dark Mode Support**: Built-in dark mode making late-night debugging easier on the eyes.
 - **Swipe-to-Toggle**: Click or natively swipe across bits to effortlessly paint bit patterns instead of clicking one by one.
 - **One-Click Copy**: Instantly copy decimal values or binary strings to your clipboard.
 - **Mathematical Overflow Protection**: Custom reduce logic bypassing JavaScript's native 32-bit signed bitwise limits to safely compute large unsigned integers.
@@ -51,12 +60,17 @@ Furthermore, this project serves as an exploration into **AI-native workflows**.
 
 ## 中文说明
 
-**Flibit Converter** 是一个互动式的 Web 工具，旨在帮助你可视化、操作和转换二进制数。它的设计侧重于教育和开发者实用性，通过现代化的 UI 帮助你深入了解位级别的操作。
+**Flibit Converter** 是一个简明的互动式二进制转换工具，帮助你直观地探索和理解位级别的操作。
+
+### 🎨 “Flibit” 的由来
+
+**Flibit** 这个名字源自硬件中的“比特翻转 (Bit Flip)”现象（指内存中的比特有时因宇宙射线等环境因素自发改变状态）。有趣的是，如果我们把这两个词的位置本身也“翻转”一下变成 "Flip bit"，再拼起来就成了 **Flibit**——读起来正好也是 “Flip it” (翻转它) 的谐音！应用的整体设计——不管是翻页日历风格的 Logo，还是 UI 中灵动的位翻转动画——都形象地沿用了这一思想。
 
 ### ✨ 核心功能
 
 - **8 / 16 / 32 位架构支持**: 无缝切换不同位长度的数据表示。
 - **有符号与无符号整数**: 实时支持基于补码（Two's Complement）的负数逻辑。
+- **暗色模式支持 (Dark Mode)**: 内置暗色模式，降低深夜调试代码时的视觉疲劳。
 - **丝滑的涂鸦模式 (Swipe-to-Toggle)**: 按住鼠标在方块上划过即可连续翻转位状态，告别繁琐的单点操作。
 - **一键复制**: 快速将十进制数值或二进制字符串复制到剪贴板。
 - **数学级溢出保护**: 放弃 JS 原生的 32位有符号位移限制，改用纯数学逻辑计算，安全处理大额无符号整数。

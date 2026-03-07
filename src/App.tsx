@@ -24,7 +24,7 @@ function App() {
       localStorage.setItem("flibit-theme", "light");
     }
   }, [isDarkMode]);
-  const [clickMode, setClickMode] = useState<"flip" | "add">("add");
+  const [clickMode, setClickMode] = useState<"flip" | "add">("flip");
 
   const minConvertNumber = isSigned ? -Math.pow(2, bitsLength - 1) : 0;
   const maxConvertNumber = isSigned

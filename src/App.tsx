@@ -6,6 +6,7 @@ import ConvertModeButton from "./ConvertModeButton";
 function App() {
   const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
   const [isSigned, setIsSigned] = useState<boolean>(false);
+  const [clickMode, setClickMode] = useState<"flip" | "add">("add");
 
   const minConvertNumber = isSigned ? -Math.pow(2, bitsLength - 1) : 0;
   const maxConvertNumber = isSigned
@@ -43,18 +44,57 @@ function App() {
   };
 
   function handleClick(id: number) {
-    const newArray =
-      inputNumber === "" ? Array(bitsLength).fill(0) : [...binaryArray];
-    newArray[id] = binaryArray[id] ^ 1;
+    if (clickMode === "add") {
+      const position = bitsLength - 1 - id;
+      const addValue = Math.pow(2, position);
+      const currentValue = inputNumber === "" ? 0 : (inputNumber as number);
 
-    // Use mathematical operations instead of bitwise to avoid JS 32-bit signed integer limits
-    let newNumber = newArray.reduce((acc, bit) => (acc * 2) + bit, 0);
+      // 1. Convert current value to pure unsigned binary equivalent
+      const unsignedCurrent = toUnsigned(currentValue);
 
-    // In signed mode, interpret the most significant bit (MSB) as negative weight
-    if (isSigned && newArray[0] === 1) {
-      newNumber = newNumber - Math.pow(2, bitsLength);
+      // 2. Perform raw mathematical addition
+      const rawNewNumber = unsignedCurrent + addValue;
+
+      // 3. Perfect Hardware Truncation (using BigInt to avoid JS 32-bit bitwise limits)
+      const truncatedNumber = simulateHardwareTruncation(rawNewNumber);
+
+      // 4. Convert back to Signed representation if necessary
+      const finalNumber = isSigned ? toSigned(truncatedNumber) : truncatedNumber;
+
+      setInputNumber(finalNumber);
+    } else {
+      // Flip mode: Purely toggle the bit without carrying over
+      const newArray = [...binaryArray];
+      newArray[id] ^= 1; // Toggle the specific bit
+
+      let newNumber = newArray.reduce((acc, bit) => (acc * 2) + bit, 0);
+
+      // In signed mode, interpret the most significant bit (MSB) as negative weight
+      if (isSigned && newArray[0] === 1) {
+        newNumber = newNumber - Math.pow(2, bitsLength);
+      }
+
+      setInputNumber(newNumber);
     }
-    setInputNumber(newNumber);
+  }
+
+  /////////////////////// Math Helper functions ////////////////////////////
+
+  function toUnsigned(val: number): number {
+    // Two's complement: wrap negative numbers into unsigned space
+    return val < 0 ? val + Math.pow(2, bitsLength) : val;
+  }
+
+  function simulateHardwareTruncation(val: number): number {
+    const maxUnsigned = Math.pow(2, bitsLength);
+    const mask = BigInt(maxUnsigned) - 1n; // e.g. 255n for 8 bits
+    return Number(BigInt(val) & mask);
+  }
+
+  function toSigned(unsignedVal: number): number {
+    const msbValue = Math.pow(2, bitsLength - 1);
+    // Two's complement: if MSB is set, it's a negative number
+    return unsignedVal >= msbValue ? unsignedVal - Math.pow(2, bitsLength) : unsignedVal;
   }
 
   /////////////////////// Helper functions /////////////////////////////////
@@ -111,6 +151,8 @@ function App() {
             onModeChange={setBitsLength}
             isSigned={isSigned}
             onSignedChange={setIsSigned}
+            clickMode={clickMode}
+            onClickModeChange={setClickMode}
           />
 
           <div className="h-px bg-slate-100 my-4 mx-2" />
@@ -142,7 +184,6 @@ function App() {
         </p>
       </footer>
     </div>
-
   );
 }
 

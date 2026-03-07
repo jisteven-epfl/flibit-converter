@@ -61,14 +61,16 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
 
             {/* Row 3: Click Action Selection */}
             <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black text-slate-400 uppercase w-10">Action</span>
+                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase w-10">Action</span>
                 <div className="flex gap-2">
                     {["flip", "add"].map(mode => (
                         <button
                             key={mode}
                             aria-pressed={clickMode === mode}
                             onClick={() => onClickModeChange(mode as "flip" | "add")}
-                            className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${clickMode === mode ? 'bg-blue-300 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100'
+                            className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${clickMode === mode
+                                ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm'
+                                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700'
                                 }`}
                         >
                             {mode}

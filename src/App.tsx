@@ -6,6 +6,7 @@ import ConvertModeButton from "./ConvertModeButton";
 function App() {
   const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
   const [isSigned, setIsSigned] = useState<boolean>(false);
+  const [clickMode, setClickMode] = useState<"flip" | "add">("add");
 
   const minConvertNumber = isSigned ? -Math.pow(2, bitsLength - 1) : 0;
   const maxConvertNumber = isSigned
@@ -43,42 +44,57 @@ function App() {
   };
 
   function handleClick(id: number) {
-    const position = bitsLength - 1 - id;
+    if (clickMode === "add") {
+      const position = bitsLength - 1 - id;
+      const addValue = Math.pow(2, position);
+      const currentValue = inputNumber === "" ? 0 : (inputNumber as number);
 
-    // For MSB in signed mode with addition architecture:
-    // If we click MSB (which acts as -128 in 8-bit), we ADD to the total value, and simulate unsigned hardware truncation.
-    // The previous implementation used bitwise toggling. To truly add, we treat the MSB positively (e.g. adding 128 to -128).
+      // 1. Convert current value to pure unsigned binary equivalent
+      const unsignedCurrent = toUnsigned(currentValue);
 
-    // Normal mathematical addition logic for all bits
-    const addValue = Math.pow(2, position);
-    const currentValue = inputNumber === "" ? 0 : (inputNumber as number);
+      // 2. Perform raw mathematical addition
+      const rawNewNumber = unsignedCurrent + addValue;
 
-    // If we're in signed mode, it's easiest to convert current value to its exact unsigned binary equivalent first
-    let unsignedCurrent = currentValue;
-    if (currentValue < 0) {
-      unsignedCurrent = currentValue + Math.pow(2, bitsLength);
+      // 3. Perfect Hardware Truncation (using BigInt to avoid JS 32-bit bitwise limits)
+      const truncatedNumber = simulateHardwareTruncation(rawNewNumber);
+
+      // 4. Convert back to Signed representation if necessary
+      const finalNumber = isSigned ? toSigned(truncatedNumber) : truncatedNumber;
+
+      setInputNumber(finalNumber);
+    } else {
+      // Flip mode: Purely toggle the bit without carrying over
+      const newArray = [...binaryArray];
+      newArray[id] ^= 1; // Toggle the specific bit
+
+      let newNumber = newArray.reduce((acc, bit) => (acc * 2) + bit, 0);
+
+      // In signed mode, interpret the most significant bit (MSB) as negative weight
+      if (isSigned && newArray[0] === 1) {
+        newNumber = newNumber - Math.pow(2, bitsLength);
+      }
+
+      setInputNumber(newNumber);
     }
+  }
 
-    // Perform pure unsigned addition
-    const rawNewNumber = unsignedCurrent + addValue;
+  /////////////////////// Math Helper functions ////////////////////////////
 
-    // Simulate Hardware Truncation (ignore carry out) perfectly using BigInt masking
-    // Using BigInt avoids JS 32-bit bitwise limitations
+  function toUnsigned(val: number): number {
+    // Two's complement: wrap negative numbers into unsigned space
+    return val < 0 ? val + Math.pow(2, bitsLength) : val;
+  }
+
+  function simulateHardwareTruncation(val: number): number {
     const maxUnsigned = Math.pow(2, bitsLength);
     const mask = BigInt(maxUnsigned) - 1n; // e.g. 255n for 8 bits
-    const truncatedNumber = Number(BigInt(rawNewNumber) & mask);
+    return Number(BigInt(val) & mask);
+  }
 
-    let finalNumber = truncatedNumber;
-
-    // Convert back to Signed representation if necessary
-    if (isSigned) {
-      const msbValue = Math.pow(2, bitsLength - 1);
-      if (truncatedNumber >= msbValue) {
-        finalNumber = truncatedNumber - maxUnsigned;
-      }
-    }
-
-    setInputNumber(finalNumber);
+  function toSigned(unsignedVal: number): number {
+    const msbValue = Math.pow(2, bitsLength - 1);
+    // Two's complement: if MSB is set, it's a negative number
+    return unsignedVal >= msbValue ? unsignedVal - Math.pow(2, bitsLength) : unsignedVal;
   }
 
   /////////////////////// Helper functions /////////////////////////////////
@@ -135,6 +151,8 @@ function App() {
             onModeChange={setBitsLength}
             isSigned={isSigned}
             onSignedChange={setIsSigned}
+            clickMode={clickMode}
+            onClickModeChange={setClickMode}
           />
 
           <div className="h-px bg-slate-100 my-4 mx-2" />

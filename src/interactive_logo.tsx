@@ -41,7 +41,7 @@ export function FlipBitInteractive() {
                 viewBox="0 0 120 160"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-10 h-auto drop-shadow-sm group-hover:scale-[1.05] group-active:scale-95 transition-transform duration-300"
+                className="w-10 h-auto drop-shadow-sm group-hover:scale-[1.05] group-active:scale-95 transition-transform duration-300 select-none"
             >
                 {/* Ombre portée */}
                 <rect x="6" y="10" width="108" height="148" rx="12" fill="#0f172a" opacity="0.2" />

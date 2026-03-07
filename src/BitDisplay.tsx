@@ -46,7 +46,7 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
             </div>
 
             <p className="text-[10px] text-slate-400 font-medium mb-3 -mt-1 italic">
-                ✨ Tip: Click or swipe across bits to toggle them
+                ✨ Tip: Click or swipe across bits to flip them
             </p>
 
             <div className="flex flex-col gap-6 select-none">
@@ -117,17 +117,32 @@ const BitButton: React.FC<BitButtonProps> = ({
                     }
                 }}
                 onDragStart={(e) => e.preventDefault()}
-                className={`
-          w-full aspect-square
-          flex items-center justify-center
-          rounded-lg font-mono font-bold transition-all
-          border-none 
-          outline-none
-          cursor-pointer
-          active:scale-95
-          ${bit === 1 ? "bg-blue-300 text-white" : "bg-slate-100 text-slate-400"}`}
+                className="relative w-full aspect-square border-none outline-none cursor-pointer group"
+                style={{ perspective: '600px' }}
             >
-                {bit}
+                <div
+                    className="w-full h-full absolute top-0 left-0 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                    style={{
+                        transformStyle: 'preserve-3d',
+                        transform: bit === 1 ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                    }}
+                >
+                    {/* Front Face (0) */}
+                    <div
+                        className="w-full h-full absolute top-0 left-0 flex items-center justify-center rounded-lg font-mono font-bold bg-slate-100 text-slate-400 group-active:scale-95 transition-transform"
+                        style={{ backfaceVisibility: 'hidden' }}
+                    >
+                        0
+                    </div>
+
+                    {/* Back Face (1) */}
+                    <div
+                        className="w-full h-full absolute top-0 left-0 flex items-center justify-center rounded-lg font-mono font-bold bg-blue-300 text-white group-active:scale-95 transition-transform"
+                        style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                    >
+                        1
+                    </div>
+                </div>
             </button>
             <label
                 htmlFor={bitId}

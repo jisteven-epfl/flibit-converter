@@ -140,7 +140,7 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-12 px-4 flex flex-col items-center transition-colors duration-500">
       <div className="w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200 dark:shadow-none overflow-hidden border border-slate-100 dark:border-slate-800 transition-colors">
-        <div className="bg-blue-300 dark:bg-blue-600 py-6 px-4 flex flex-col items-center relative">
+        <div className="bg-blue-300 dark:bg-blue-600 py-6 px-6 flex flex-col items-start sm:items-center relative">
           <button
             onClick={() => setIsDarkMode(!isDarkMode)}
             className="absolute top-4 right-4 p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition-colors border border-white/20"
@@ -152,14 +152,21 @@ function App() {
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>
             )}
           </button>
-          <div className="flex items-center justify-center gap-3 ml-12">
-            <h1 className="font-black text-white text-xl uppercase tracking-widest mt-1">
-              Flibit Converter
+          <div className="flex items-start sm:items-center justify-start sm:justify-center sm:ml-12">
+            <h1 className="font-black text-white text-xl uppercase tracking-widest mt-1 flex flex-col sm:flex-row sm:items-center gap-0 sm:gap-3 leading-tight">
+              <span>Flibit</span>
+              <span className="flex items-center gap-1.5">
+                Converter
+                <FlipBitInteractive />
+              </span>
             </h1>
-            <FlipBitInteractive />
           </div>
-          <p className="text-center text-blue-50/80 dark:text-blue-100/70 text-sm mt-2 font-medium tracking-wide">
-            A simple binary converter that lets you intuitively <span className="text-white underline decoration-blue-200 dark:decoration-blue-400 underline-offset-4">play ↑</span> with bits.
+          <p className="text-left sm:text-center text-blue-50/80 dark:text-blue-100/70 text-sm mt-2 font-medium tracking-wide">
+            A simple binary converter that lets you intuitively{" "}
+            <span className="sm:text-white sm:underline sm:decoration-blue-200 sm:dark:decoration-blue-400 sm:underline-offset-4 transition-all">
+              play<span className="hidden sm:inline"> ↑</span>
+            </span>{" "}
+            with bits.
           </p>
         </div>
 

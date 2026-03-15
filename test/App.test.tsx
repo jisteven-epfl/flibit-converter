@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../src/App";
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
 describe("App Integration", () => {
   let user: ReturnType<typeof userEvent.setup>;
@@ -112,16 +112,72 @@ describe("App Integration", () => {
     await user.click(signedButton);
 
     // -1 should no longer show negative hardware warning, since it's signed mode now
-    // And it is within 8-bit signed range [-128, 127]
     expect(screen.queryByText(/Negative input:/i)).not.toBeInTheDocument();
 
     await user.clear(input);
     // Test non-integer input (e.g. 1.5)
-    // Since we prevent '.', 'e' onKeyDown, typing '.' won't register normally, so let's fire event
     fireEvent.change(input, { target: { value: "1.5" } });
     expect(
       screen.getAllByText(/Input is not integer./i)[0],
     ).toBeInTheDocument();
+  });
+
+  it("should toggle theme and persist to localStorage", async () => {
+    render(<App />);
+    
+    // Find the theme toggle button
+    const themeBtn = screen.getByTitle(/Switch to (dark|light) mode/i);
+    const initialTitle = themeBtn.getAttribute("title");
+    
+    await user.click(themeBtn);
+    
+    // Verify it toggled
+    const newTitle = themeBtn.getAttribute("title");
+    expect(newTitle).not.toBe(initialTitle);
+    
+    // Verify localStorage was called
+    const savedTheme = localStorage.getItem("flibit-theme");
+    expect(savedTheme).toMatch(/dark|light/);
+  });
+
+  it("should handle 16-bit mode and show Byte labels", async () => {
+    render(<App />);
+    
+    // Switch to 16-bit mode
+    const bit16Button = screen.getByRole("button", { name: /16-bit/i });
+    await user.click(bit16Button);
+
+    // Check for Byte labels (Byte 0 and Byte 1)
+    expect(screen.getByText(/Byte 0/i)).toBeInTheDocument();
+    expect(screen.getByText(/Byte 1/i)).toBeInTheDocument();
+
+    // Verify bit 15 exists
+    expect(screen.getByRole("button", { name: /Bit 15/i })).toBeInTheDocument();
+  });
+
+  it("should handle copy to clipboard", async () => {
+    // Mock navigator.clipboard
+    const mockWriteText = vi.fn().mockImplementation(() => Promise.resolve());
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText: mockWriteText },
+      configurable: true,
+    });
+
+    render(<App />);
+    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    await user.type(input, "42");
+
+    // Copy decimal
+    const copyDecimalBtn = screen.getByRole("button", { name: /Copy$/i });
+    await user.click(copyDecimalBtn);
+    expect(mockWriteText).toHaveBeenCalledWith("42");
+    expect(screen.getByText(/✓ Copied!/i)).toBeInTheDocument();
+
+    // Copy binary
+    const copyBinaryBtn = screen.getByRole("button", { name: /Copy Bits/i });
+    await user.click(copyBinaryBtn);
+    // 42 in 8-bit binary is 00101010
+    expect(mockWriteText).toHaveBeenCalledWith("00101010");
   });
 
   it("should simulate swipe-to-toggle logic", () => {

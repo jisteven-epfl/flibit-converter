@@ -4,13 +4,19 @@
 
 <h1 align="center">Flibit Converter</h1>
 
+<div align="center">
+
+[![CI](https://github.com/jisteven-epfl/flibit-converter/actions/workflows/ci.yml/badge.svg)](https://github.com/jisteven-epfl/flibit-converter/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/jisteven-epfl/flibit-converter/branch/main/graph/badge.svg?token=)](https://codecov.io/gh/jisteven-epfl/flibit-converter)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://flibit-converter.vercel.app/)
 
-*A simple binary converter that lets you intuitively play with bits.*
+</div>
+
+_A simple binary converter that lets you intuitively play with bits._
 
 🚀 **Live Demo:** [https://flibit-converter.vercel.app/](https://flibit-converter.vercel.app/)
 
@@ -24,7 +30,7 @@
 
 ### 🎨 The "Flibit" Story
 
-The name **Flibit** comes from the term "bit flip" (a hardware phenomenon where a bit in memory spontaneously changes state, sometimes due to cosmic rays). By literally *flipping* the words to "flip bit" and merging them, we get Flibit—which also pleasantly sounds like "Flip it"! The app's overall design physically embodies this core concept, from its notebook flip-calendar logo to the interactive bit-flipping animations in the UI.
+The name **Flibit** comes from the term "bit flip" (a hardware phenomenon where a bit in memory spontaneously changes state, sometimes due to cosmic rays). By literally _flipping_ the words to "flip bit" and merging them, we get Flibit—which also pleasantly sounds like "Flip it"! The app's overall design physically embodies this core concept, from its notebook flip-calendar logo to the interactive bit-flipping animations in the UI.
 
 ### ✨ Features
 
@@ -98,4 +104,4 @@ Furthermore, this project serves as an exploration into **AI-native workflows**.
 
 ---
 
-*Crafted by Steven Ji 2026 // MIT License*
+_Crafted by Steven Ji 2026 // MIT License_

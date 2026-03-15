@@ -3,6 +3,7 @@ import InputArea from "./InputArea";
 import BitDisplay from "./BitDisplay";
 import ConvertModeButton from "./ConvertModeButton";
 import { FlipBitInteractive } from "./interactive_logo";
+import { toBinary, toSigned, toUnsigned, simulateHardwareTruncation } from "./utils/math";
 
 function App() {
   const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
@@ -45,7 +46,7 @@ function App() {
       isInputNoneInteger ||
       isInputTooBig ||
       isInputTooSmall);
-  const binaryArray = toBinary(isInputParsable ? (inputNumber as number) : 0);
+  const binaryArray = toBinary(isInputParsable ? (inputNumber as number) : 0, bitsLength);
 
   /////////////////////// Handle interaction /////////////////////////////////
 
@@ -68,16 +69,16 @@ function App() {
       const currentValue = inputNumber === "" ? 0 : (inputNumber as number);
 
       // 1. Convert current value to pure unsigned binary equivalent
-      const unsignedCurrent = toUnsigned(currentValue);
+      const unsignedCurrent = toUnsigned(currentValue, bitsLength);
 
       // 2. Perform raw mathematical addition
       const rawNewNumber = unsignedCurrent + addValue;
 
       // 3. Perfect Hardware Truncation (using BigInt to avoid JS 32-bit bitwise limits)
-      const truncatedNumber = simulateHardwareTruncation(rawNewNumber);
+      const truncatedNumber = simulateHardwareTruncation(rawNewNumber, bitsLength);
 
       // 4. Convert back to Signed representation if necessary
-      const finalNumber = isSigned ? toSigned(truncatedNumber) : truncatedNumber;
+      const finalNumber = isSigned ? toSigned(truncatedNumber, bitsLength) : truncatedNumber;
 
       setInputNumber(finalNumber);
     } else {
@@ -94,35 +95,6 @@ function App() {
 
       setInputNumber(newNumber);
     }
-  }
-
-  /////////////////////// Math Helper functions ////////////////////////////
-
-  function toUnsigned(val: number): number {
-    // Two's complement: wrap negative numbers into unsigned space
-    return val < 0 ? val + Math.pow(2, bitsLength) : val;
-  }
-
-  function simulateHardwareTruncation(val: number): number {
-    const maxUnsigned = Math.pow(2, bitsLength);
-    const mask = BigInt(maxUnsigned) - 1n; // e.g. 255n for 8 bits
-    return Number(BigInt(val) & mask);
-  }
-
-  function toSigned(unsignedVal: number): number {
-    const msbValue = Math.pow(2, bitsLength - 1);
-    // Two's complement: if MSB is set, it's a negative number
-    return unsignedVal >= msbValue ? unsignedVal - Math.pow(2, bitsLength) : unsignedVal;
-  }
-
-  /////////////////////// Helper functions /////////////////////////////////
-
-  function toBinary(n: number): Array<number> {
-    const bits = Array.from({ length: bitsLength }, (_, i) => {
-      const shiftAmount = bitsLength - 1 - i;
-      return (n >>> shiftAmount) & 1;
-    });
-    return bits;
   }
 
   const getErrorMessage =

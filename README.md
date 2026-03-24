@@ -48,6 +48,12 @@ The name **Flibit** comes from the term "bit flip" (a hardware phenomenon where 
 1. Clone the repository: `git clone https://github.com/jisteven-epfl/flibit-converter.git`
 2. Install dependencies: `npm install`
 3. Run the development server: `npm run dev`
+4. **Run with Docker**:
+   ```bash
+   docker pull ghcr.io/jisteven-epfl/flibit-converter:latest
+   docker run -p 8080:80 ghcr.io/jisteven-epfl/flibit-converter:latest
+   ```
+   Then visit `http://localhost:8080`.
 
 ### 🧰 Tech Stack
 
@@ -88,6 +94,12 @@ Furthermore, this project serves as an exploration into **AI-native workflows**.
 1. 克隆仓库: `git clone https://github.com/jisteven-epfl/flibit-converter.git`
 2. 安装依赖: `npm install`
 3. 运行开发服务器: `npm run dev`
+4. **通过 Docker 运行**:
+   ```bash
+   docker pull ghcr.io/jisteven-epfl/flibit-converter:latest
+   docker run -p 8080:80 ghcr.io/jisteven-epfl/flibit-converter:latest
+   ```
+   然后访问 `http://localhost:8080`。
 
 ### 🧰 技术栈
 

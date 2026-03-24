@@ -1,4 +1,5 @@
 import React from "react";
+import InfoTooltip from "./InfoTooltip";
 
 interface ConvertModeButtonProps {
     currentMode: number;
@@ -21,7 +22,10 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
         <div className="flex flex-col gap-3 mx-2 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl transition-colors">
             {/* Row 1: Width Selection */}
             <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase w-10">Width</span>
+                <span className="flex items-center gap-1.5 text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase w-16">
+                    Width
+                    <InfoTooltip text="Choose how many bits to display (8, 16, or 32)." />
+                </span>
                 <div className="flex gap-2">
                     {[8, 16, 32].map(mode => (
                         <button
@@ -41,7 +45,10 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
 
             {/* Row 2: Signed Mode Selection */}
             <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase w-10">Type</span>
+                <span className="flex items-center gap-1 text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase w-16">
+                    Type
+                    <InfoTooltip text="Unsigned treats all bits as positive value; Signed uses two's complement." />
+                </span>
                 <div className="flex gap-2">
                     {["unsigned", "signed"].map(mode => (
                         <button
@@ -61,7 +68,10 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
 
             {/* Row 3: Click Action Selection */}
             <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase w-10">Action</span>
+                <span className="flex items-center gap-1.5 text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase w-16">
+                    Action
+                    <InfoTooltip text="Flip toggles a single bit; Add increments the value by that bit's weight." />
+                </span>
                 <div className="flex gap-2">
                     {["flip", "add"].map(mode => (
                         <button

@@ -14,7 +14,7 @@ describe("App Integration", () => {
 
   it("should render main components", () => {
     render(<App />);
-    expect(screen.getByText(/Flibit/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Flibit/i)[0]).toBeInTheDocument();
     expect(screen.getByLabelText(/Decimal Value/i)).toBeInTheDocument();
     expect(screen.getByText(/Binary Result/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /8-bit/i })).toBeInTheDocument();

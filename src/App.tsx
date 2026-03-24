@@ -4,6 +4,7 @@ import BitDisplay from "./BitDisplay";
 import ConvertModeButton from "./ConvertModeButton";
 import { FlipBitInteractive } from "./interactive_logo";
 import { toBinary, toSigned, toUnsigned, simulateHardwareTruncation } from "./utils/math";
+import SEOContent from "./SEOContent";
 
 function App() {
   const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
@@ -177,7 +178,9 @@ function App() {
         </div>
       </div>
 
-      <footer className="mt-12 flex flex-col items-center gap-2">
+      <SEOContent />
+
+      <footer className="mt-12 mb-12 flex flex-col items-center gap-2">
         <div className="flex items-center gap-3">
           <div className="h-px w-8 bg-slate-300 dark:bg-slate-700" />
           <a

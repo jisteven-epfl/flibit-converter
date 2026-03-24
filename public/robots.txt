@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://flibit-converter.vercel.app/sitemap.xml

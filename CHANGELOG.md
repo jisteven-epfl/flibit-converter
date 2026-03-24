@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-03-24
+
+### Added
+
+- **SEO & Search Visibility**: Comprehensive search engine optimization (SEO) including custom meta tags, Open Graph (OG) support, Twitter cards, and JSON-LD schema markup.
+- **Search Indices**: Added `robots.txt` and `sitemap.xml` for better site discovery by search engines.
+- **Educational Knowledge Base**: New visual section below the main app explaining Binary systems, Two's Complement, and bit-level architecture to improve both UX and SEO density.
+
+### Fixed
+
+- Improved semantic HTML hierarchy for better indexability.
+
 ## [2.0.0] - 2026-03-24
 
 ### Added

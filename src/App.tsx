@@ -129,19 +129,19 @@ function App() {
   }
 
   const getErrorMessage = isInputEmpty
-    ? "Empty input."
+    ? t("errors.empty")
     : isInputNoneInteger
-      ? "Input is not integer."
+      ? t("errors.notInteger")
       : isInputTooBig
-        ? "Input is too big to handle."
+        ? t("errors.tooBig")
         : isInputTooSmall
-          ? "Input is too small to handle."
+          ? t("errors.tooSmall")
           : !isSigned && (inputNumber as number) < 0
-            ? "Negative input: Displaying bits as interpreted by the hardware."
+            ? t("errors.negativeUnsigned")
             : isTooBigToConvert
-              ? `Input is too big to display, only took ${bitsLength} LSB.`
+              ? t("errors.tooBigToConvert", { bits: bitsLength })
               : isTooSmallToConvert
-                ? `Input is too small to display, only took ${bitsLength} LSB.`
+                ? t("errors.tooSmallToConvert", { bits: bitsLength })
                 : "";
 
   /////////////////////// Actual Body /////////////////////////////////

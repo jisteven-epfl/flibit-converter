@@ -35,6 +35,32 @@ const InputArea: React.FC<InputAreaProps> = ({
     }
   };
 
+  const inputClassName = [
+    "w-full",
+    "min-w-0",
+    "py-2",
+    "px-2",
+    "text-lg",
+    "bg-white",
+    "dark:bg-slate-800",
+    "text-slate-900",
+    "dark:text-white",
+    "border",
+    hasError
+      ? "border-red-400 dark:border-red-500"
+      : "border-slate-200 dark:border-slate-700",
+    "rounded-lg",
+    "focus:ring-2",
+    hasError
+      ? "focus:ring-red-300 dark:focus:ring-red-900"
+      : "focus:ring-blue-300 dark:focus:ring-blue-500",
+    "focus:border-transparent",
+    "focus:outline-none",
+    "placeholder:text-slate-300",
+    "dark:placeholder:text-slate-600",
+    "transition-all",
+  ].join(" ");
+
   return (
     <div className="mx-2 my-2">
       <div className="flex justify-between items-center mb-1">
@@ -66,27 +92,7 @@ const InputArea: React.FC<InputAreaProps> = ({
         placeholder={t("inputArea.placeholder", { min: minConvertNumber, max: maxConvertNumber })}
         id="decimal-input"
         name="decimal"
-        className={`
-          w-full
-          min-w-0
-          py-2
-          px-2
-          text-lg
-          bg-white
-          dark:bg-slate-800
-          text-slate-900
-          dark:text-white
-          border
-          ${hasError ? "border-red-400 dark:border-red-500" : "border-slate-200 dark:border-slate-700"}
-          rounded-lg
-          focus:ring-2
-          ${hasError ? "focus:ring-red-300 dark:focus:ring-red-900" : "focus:ring-blue-300 dark:focus:ring-blue-500"}
-          focus:border-transparent
-          focus:outline-none
-          placeholder:text-slate-300
-          dark:placeholder:text-slate-600
-          transition-all
-        `}
+        className={inputClassName}
       />
     </div>
   );

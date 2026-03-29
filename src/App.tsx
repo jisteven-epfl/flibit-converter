@@ -5,7 +5,12 @@ import BitDisplay from "./BitDisplay";
 import ConvertModeButton from "./ConvertModeButton";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { FlipBitInteractive } from "./interactive_logo";
-import { toBinary, toSigned, toUnsigned, simulateHardwareTruncation } from "./utils/math";
+import {
+  toBinary,
+  toSigned,
+  toUnsigned,
+  simulateHardwareTruncation,
+} from "./utils/math";
 import SEOContent from "./SEOContent";
 
 function App() {
@@ -15,7 +20,10 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("flibit-theme");
-      return saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      return (
+        saved === "dark" ||
+        (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      );
     }
     return false;
   });
@@ -45,12 +53,26 @@ function App() {
   const isInputTooSmall = !isInputEmpty && inputNumber < minInputNumber;
   const isTooBigToConvert = !isInputEmpty && inputNumber > maxConvertNumber;
   const isTooSmallToConvert = !isInputEmpty && inputNumber < minConvertNumber;
-  const isInputParsable =
-    !(isInputEmpty ||
-      isInputNoneInteger ||
+  const isInputParsable = !(
+    isInputEmpty ||
+    isInputNoneInteger ||
+    isInputTooBig ||
+    isInputTooSmall
+  );
+
+  // Define error state for visual feedback
+  const hasError =
+    !isInputEmpty &&
+    (isInputNoneInteger ||
       isInputTooBig ||
-      isInputTooSmall);
-  const binaryArray = toBinary(isInputParsable ? (inputNumber as number) : 0, bitsLength);
+      isInputTooSmall ||
+      isTooBigToConvert ||
+      isTooSmallToConvert);
+
+  const binaryArray = toBinary(
+    isInputParsable ? (inputNumber as number) : 0,
+    bitsLength,
+  );
 
   /////////////////////// Handle interaction /////////////////////////////////
 
@@ -79,10 +101,15 @@ function App() {
       const rawNewNumber = unsignedCurrent + addValue;
 
       // 3. Perfect Hardware Truncation (using BigInt to avoid JS 32-bit bitwise limits)
-      const truncatedNumber = simulateHardwareTruncation(rawNewNumber, bitsLength);
+      const truncatedNumber = simulateHardwareTruncation(
+        rawNewNumber,
+        bitsLength,
+      );
 
       // 4. Convert back to Signed representation if necessary
-      const finalNumber = isSigned ? toSigned(truncatedNumber, bitsLength) : truncatedNumber;
+      const finalNumber = isSigned
+        ? toSigned(truncatedNumber, bitsLength)
+        : truncatedNumber;
 
       setInputNumber(finalNumber);
     } else {
@@ -90,7 +117,7 @@ function App() {
       const newArray = [...binaryArray];
       newArray[id] ^= 1; // Toggle the specific bit
 
-      let newNumber = newArray.reduce((acc, bit) => (acc * 2) + bit, 0);
+      let newNumber = newArray.reduce((acc, bit) => acc * 2 + bit, 0);
 
       // In signed mode, interpret the most significant bit (MSB) as negative weight
       if (isSigned && newArray[0] === 1) {
@@ -101,15 +128,21 @@ function App() {
     }
   }
 
-  const getErrorMessage =
-    isInputEmpty ? t("errors.empty") :
-      isInputNoneInteger ? t("errors.notInteger") :
-        isInputTooBig ? t("errors.tooBig") :
-          isInputTooSmall ? t("errors.tooSmall") :
-            (!isSigned && (inputNumber as number) < 0) ? t("errors.negativeUnsigned") :
-              isTooBigToConvert ? t("errors.tooBigToConvert", { bits: bitsLength }) :
-                isTooSmallToConvert ? t("errors.tooSmallToConvert", { bits: bitsLength }) :
-                  "";
+  const getErrorMessage = isInputEmpty
+    ? "Empty input."
+    : isInputNoneInteger
+      ? "Input is not integer."
+      : isInputTooBig
+        ? "Input is too big to handle."
+        : isInputTooSmall
+          ? "Input is too small to handle."
+          : !isSigned && (inputNumber as number) < 0
+            ? "Negative input: Displaying bits as interpreted by the hardware."
+            : isTooBigToConvert
+              ? `Input is too big to display, only took ${bitsLength} LSB.`
+              : isTooSmallToConvert
+                ? `Input is too small to display, only took ${bitsLength} LSB.`
+                : "";
 
   /////////////////////// Actual Body /////////////////////////////////
 
@@ -124,9 +157,43 @@ function App() {
             title={isDarkMode ? t("header.themeToggle.toLight") : t("header.themeToggle.toDark")}
           >
             {isDarkMode ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sun"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M22 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-sun"
+              >
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.93 4.93 1.41 1.41" />
+                <path d="m17.66 17.66 1.41 1.41" />
+                <path d="M2 12h2" />
+                <path d="M22 12h2" />
+                <path d="m6.34 17.66-1.41 1.41" />
+                <path d="m19.07 4.93-1.41 1.41" />
+              </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-moon"
+              >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+              </svg>
             )}
           </button>
           <div className="flex items-start sm:items-center justify-start sm:justify-center sm:ml-12">
@@ -156,6 +223,7 @@ function App() {
             minInputNumber={minInputNumber}
             maxConvertNumber={maxConvertNumber}
             minConvertNumber={minConvertNumber}
+            hasError={hasError}
           />
 
           <ConvertModeButton
@@ -194,7 +262,13 @@ function App() {
           <div className="h-px w-8 bg-slate-300 dark:bg-slate-700" />
         </div>
         <p className="text-slate-400 dark:text-slate-500 text-[10px] font-bold">
-          Built by <span className="text-blue-400 dark:text-blue-500">Steven Ji</span> using <span className="text-blue-400 dark:text-blue-500">Google Antigravity</span> 2026 // MIT License
+          Built by{" "}
+          <span className="text-blue-400 dark:text-blue-500">Steven Ji</span>{" "}
+          using{" "}
+          <span className="text-blue-400 dark:text-blue-500">
+            Google Antigravity
+          </span>{" "}
+          2026 // MIT License
         </p>
       </footer>
     </div>

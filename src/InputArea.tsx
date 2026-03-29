@@ -2,31 +2,29 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface InputAreaProps {
-    inputNumber: number | "";
-    onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    maxInputNumber: number;
-    minInputNumber: number;
-    maxConvertNumber: number;
-    minConvertNumber: number;
+  inputNumber: number | "";
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  maxInputNumber: number;
+  minInputNumber: number;
+  maxConvertNumber: number;
+  minConvertNumber: number;
+  hasError?: boolean;
 }
 
 const InputArea: React.FC<InputAreaProps> = ({
-    inputNumber,
-    onInputChange,
-    maxInputNumber,
-    minInputNumber,
-    maxConvertNumber,
-    minConvertNumber,
+  inputNumber,
+  onInputChange,
+  maxInputNumber,
+  minInputNumber,
+  maxConvertNumber,
+  minConvertNumber,
+  hasError = false,
 }) => {
     const { t } = useTranslation();
     const [copied, setCopied] = React.useState(false);
 
-    const handleCopy = () => {
-        if (inputNumber === "") return;
-        navigator.clipboard.writeText(inputNumber.toString());
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
+  const handleCopy = async () => {
+    if (inputNumber === "") return;
 
     return (
         <div className="mx-2 my-2">
@@ -70,20 +68,18 @@ const InputArea: React.FC<InputAreaProps> = ({
           text-slate-900
           dark:text-white
           border
-          border-slate-200
-          dark:border-slate-700
+          ${hasError ? "border-red-400 dark:border-red-500" : "border-slate-200 dark:border-slate-700"}
           rounded-lg
           focus:ring-2
-          focus:ring-blue-300
-          dark:focus:ring-blue-500
+          ${hasError ? "focus:ring-red-300 dark:focus:ring-red-900" : "focus:ring-blue-300 dark:focus:ring-blue-500"}
           focus:border-transparent
           focus:outline-none
           placeholder:text-slate-300
           dark:placeholder:text-slate-600
-          transition-all"
-            />
-        </div>
-    );
+          transition-all`}
+      />
+    </div>
+  );
 };
 
 export default InputArea;

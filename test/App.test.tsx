@@ -94,6 +94,9 @@ describe("App Integration", () => {
       screen.getAllByText(/Input is too big to display, only took 8 LSB./i)[0],
     ).toBeInTheDocument();
 
+    // Should have error class for out-of-range input
+    expect(input).toHaveClass("border-red-400");
+
     // Try clearing
     await user.clear(input);
     expect(input.value).toBe("");
@@ -120,21 +123,24 @@ describe("App Integration", () => {
     expect(
       screen.getAllByText(/Input is not integer./i)[0],
     ).toBeInTheDocument();
+
+    // Check if error class is applied
+    expect(input).toHaveClass("border-red-400");
   });
 
   it("should toggle theme and persist to localStorage", async () => {
     render(<App />);
-    
+
     // Find the theme toggle button
     const themeBtn = screen.getByTitle(/Switch to (dark|light) mode/i);
     const initialTitle = themeBtn.getAttribute("title");
-    
+
     await user.click(themeBtn);
-    
+
     // Verify it toggled
     const newTitle = themeBtn.getAttribute("title");
     expect(newTitle).not.toBe(initialTitle);
-    
+
     // Verify localStorage was called
     const savedTheme = localStorage.getItem("flibit-theme");
     expect(savedTheme).toMatch(/dark|light/);
@@ -142,7 +148,7 @@ describe("App Integration", () => {
 
   it("should handle 16-bit mode and show Byte labels", async () => {
     render(<App />);
-    
+
     // Switch to 16-bit mode
     const bit16Button = screen.getByRole("button", { name: /16-bit/i });
     await user.click(bit16Button);

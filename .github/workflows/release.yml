@@ -1,0 +1,52 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - CHANGELOG.md
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract latest version from CHANGELOG
+        id: changelog
+        run: |
+          # Get the first version entry from CHANGELOG.md (e.g. "## [2.2.0] - 2026-03-29")
+          VERSION=$(grep -m1 -oP '(?<=## \[)\d+\.\d+\.\d+(?=\])' CHANGELOG.md)
+          DATE=$(grep -m1 -oP '(?<=## \['"$VERSION"'\] - )\S+' CHANGELOG.md)
+          echo "version=v${VERSION}" >> $GITHUB_OUTPUT
+          echo "anchor=${VERSION//./}---${DATE}" >> $GITHUB_OUTPUT
+
+      - name: Check if release already exists
+        id: check_release
+        run: |
+          TAG="${{ steps.changelog.outputs.version }}"
+          if gh release view "$TAG" &>/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        if: steps.check_release.outputs.exists == 'false'
+        run: |
+          TAG="${{ steps.changelog.outputs.version }}"
+          ANCHOR="${{ steps.changelog.outputs.anchor }}"
+          BODY="[CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${ANCHOR})"
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --notes "$BODY" \
+            --target main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

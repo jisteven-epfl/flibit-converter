@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "一款简单的二进制转换器，让你直观地操作比特位。",
+    "themeToggle": {
+      "toDark": "切换到深色模式",
+      "toLight": "切换到浅色模式"
+    }
+  },
+  "inputArea": {
+    "label": "十进制值",
+    "copy": "复制",
+    "copied": "✓ 已复制!",
+    "placeholder": "请输入 {{min}} 到 {{max}} 之间的整数"
+  },
+  "bitDisplay": {
+    "label": "二进制结果",
+    "copyBits": "复制位",
+    "copied": "✓ 已复制!",
+    "tip": "✨ 提示：单击或滑动以切换比特位",
+    "byteLabel": "字节 {{index}} ({{high}} - {{low}})",
+    "bitAriaLabel": "第 {{position}} 位，值为 {{value}}"
+  },
+  "controls": {
+    "width": {
+      "label": "位宽",
+      "tooltip": "选择要显示的位数（8、16 或 32）。"
+    },
+    "type": {
+      "label": "类型",
+      "tooltip": "无符号将所有位视为正值；有符号使用二进制补码。",
+      "unsigned": "无符号",
+      "signed": "有符号"
+    },
+    "action": {
+      "label": "操作",
+      "tooltip": "翻转可切换单个比特位；加法以该位的权值递增数值。",
+      "flip": "翻转",
+      "add": "加法"
+    }
+  },
+  "errors": {
+    "empty": "输入为空。",
+    "notInteger": "输入不是整数。",
+    "tooBig": "输入值过大，无法处理。",
+    "tooSmall": "输入值过小，无法处理。",
+    "negativeUnsigned": "负数输入：按硬件解释方式显示比特位。",
+    "tooBigToConvert": "输入值过大，仅取最低 {{bits}} 位显示。",
+    "tooSmallToConvert": "输入值过小，仅取最低 {{bits}} 位显示。"
+  },
+  "footer": {
+    "github": "在 GitHub 上开源",
+    "credit": "由 <accent>Steven Ji</accent> 使用 <accent>Google Antigravity</accent> 构建 2026 // MIT 许可证"
+  },
+  "seo": {
+    "binaryConverter": {
+      "title": "什么是二进制转换器？",
+      "p1": "<strong>二进制转换器</strong>是一种将十进制数（我们日常使用的十进制数字系统）转换为二进制（基数为2）的工具，二进制是计算机的语言。计算机以一系列 0 和 1 存储所有信息——从文本到图像——这些 0 和 1 被称为<strong>比特位</strong>。",
+      "p2": "Flibit Converter 不仅提供基本转换，还允许你<strong>与单个比特位交互</strong>。这种可视化方法帮助学生和开发者理解改变单个比特位如何影响数字的整体值。"
+    },
+    "twosComplement": {
+      "title": "二进制补码的原理",
+      "p1": "在计算机中，我们经常需要表示负数。最常用的方法是<strong>二进制补码</strong>。在这个系统中，<strong>最高有效位（MSB）</strong>被用作符号位。",
+      "unsigned": "<strong>无符号：</strong>所有位代表正值（例如，8位数中第0-7位分别代表 1、2、4、8、16、32、64、128）。",
+      "signed": "<strong>有符号：</strong>MSB 代表负值（例如，8位数中代表 -128），而其他位保持正值。"
+    },
+    "bitWidths": {
+      "title": "8位、16位和32位转换",
+      "p1": "<strong>位宽</strong>决定了计算机可以表示的数字范围：",
+      "8bit": "<strong>8位：</strong>0 到 255（无符号）或 -128 到 127（有符号）。",
+      "16bit": "<strong>16位：</strong>0 到 65,535（无符号）或 -32,768 到 32,767（有符号）。",
+      "32bit": "<strong>32位：</strong>0 到逾40亿（无符号）或 -21亿 到 21亿（有符号）。"
+    },
+    "whyFlibit": {
+      "title": "为什么使用 Flibit Converter？",
+      "p1": "许多在线转换器是静态的。Flibit 专为<strong>教育探索</strong>而设计。「涂色切换」功能允许你在多个比特位上滑动，即时看到模式出现。它是调试低级代码或教授计算机体系结构的完美<strong>比特翻转工具</strong>。"
+    },
+    "terms": {
+      "title": "常见二进制转换术语：",
+      "list": ["LSB", "MSB", "比特翻转", "字节序", "二进制转十进制", "有符号整数", "无符号整数", "十六进制", "计算机体系结构", "二进制补码计算器"]
+    }
+  },
+  "languageSwitcher": {
+    "label": "语言"
+  }
+}

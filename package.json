@@ -14,8 +14,10 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "i18next": "^26.0.1",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-i18next": "^17.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

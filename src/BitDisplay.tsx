@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface BitDisplayProps {
     binaryArray: number[];
@@ -13,6 +14,7 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
     errorMessage,
     bitsLength,
 }) => {
+    const { t } = useTranslation();
     const [copied, setCopied] = React.useState(false);
 
     const handleCopyBinary = () => {
@@ -32,7 +34,7 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
         <div className="w-full px-2">
             <div className="flex justify-between items-center mb-2">
                 <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider" aria-hidden="true">
-                    Binary Result
+                    {t("bitDisplay.label")}
                     <span className="ml-2 text-red-400 normal-case font-normal italic text-[10px]">
                         {errorMessage}
                     </span>
@@ -41,12 +43,12 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
                     onClick={handleCopyBinary}
                     className="text-[10px] font-bold text-blue-400 hover:text-blue-500 dark:text-blue-500 dark:hover:text-blue-400 transition-colors uppercase tracking-tight cursor-pointer"
                 >
-                    {copied ? "✓ Copied!" : "Copy Bits"}
+                    {copied ? t("bitDisplay.copied") : t("bitDisplay.copyBits")}
                 </button>
             </div>
 
             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mb-3 -mt-1 italic">
-                ✨ Tip: Click or swipe across bits to toggle them
+                {t("bitDisplay.tip")}
             </p>
 
             <div className="flex flex-col gap-6 select-none">
@@ -55,7 +57,11 @@ const BitDisplay: React.FC<BitDisplayProps> = ({
                         {/* 组标签：可选，显示这是第几组（LSB/MSB） */}
                         {chunks.length > 1 && (
                             <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">
-                                Byte {chunks.length - 1 - chunkIndex} ({8 * (chunks.length - 1 - chunkIndex) + 7} - {8 * (chunks.length - 1 - chunkIndex)})
+                                {t("bitDisplay.byteLabel", {
+                                    index: chunks.length - 1 - chunkIndex,
+                                    high: 8 * (chunks.length - 1 - chunkIndex) + 7,
+                                    low: 8 * (chunks.length - 1 - chunkIndex),
+                                })}
                             </span>
                         )}
 
@@ -94,13 +100,14 @@ const BitButton: React.FC<BitButtonProps> = ({
     totalBits,
     onClick,
 }) => {
+    const { t } = useTranslation();
     const bitId = `bit-${totalBits - index - 1}`;
 
     return (
         <li className="flex-1 flex flex-col items-center gap-1 max-w-[48px]">
             <button
                 id={bitId}
-                aria-label={`Bit ${totalBits - index - 1}, value is ${bit}`}
+                aria-label={t("bitDisplay.bitAriaLabel", { position: totalBits - index - 1, value: bit })}
                 onMouseDown={(e) => {
                     e.preventDefault();
                     onClick();

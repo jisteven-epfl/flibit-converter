@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom";
+import "./i18n-test-setup";
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,

@@ -30,7 +30,7 @@ jobs:
         id: check_release
         run: |
           TAG="${{ steps.changelog.outputs.version }}"
-          if gh release view "$TAG" &>/dev/null 2>&1; then
+          if gh release view "$TAG" &>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT

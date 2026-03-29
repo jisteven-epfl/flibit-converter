@@ -21,11 +21,21 @@ const InputArea: React.FC<InputAreaProps> = ({
 }) => {
   const [copied, setCopied] = React.useState(false);
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (inputNumber === "") return;
-    navigator.clipboard.writeText(inputNumber.toString());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+
+    if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+      console.error("Clipboard API is not available in this browser/context.");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(inputNumber.toString());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error("Failed to copy text to clipboard.", error);
+    }
   };
 
   return (

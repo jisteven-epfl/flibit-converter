@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import InputArea from "./InputArea";
 import BitDisplay from "./BitDisplay";
 import ConvertModeButton from "./ConvertModeButton";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { FlipBitInteractive } from "./interactive_logo";
 import { toBinary, toSigned, toUnsigned, simulateHardwareTruncation } from "./utils/math";
 import SEOContent from "./SEOContent";
 
 function App() {
+  const { t } = useTranslation();
   const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
   const [isSigned, setIsSigned] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
@@ -99,13 +102,13 @@ function App() {
   }
 
   const getErrorMessage =
-    isInputEmpty ? "Empty input." :
-      isInputNoneInteger ? "Input is not integer." :
-        isInputTooBig ? "Input is too big to handle." :
-          isInputTooSmall ? "Input is too small to handle." :
-            (!isSigned && (inputNumber as number) < 0) ? "Negative input: Displaying bits as interpreted by the hardware." :
-              isTooBigToConvert ? `Input is too big to display, only took ${bitsLength} LSB.` :
-                isTooSmallToConvert ? `Input is too small to display, only took ${bitsLength} LSB.` :
+    isInputEmpty ? t("errors.empty") :
+      isInputNoneInteger ? t("errors.notInteger") :
+        isInputTooBig ? t("errors.tooBig") :
+          isInputTooSmall ? t("errors.tooSmall") :
+            (!isSigned && (inputNumber as number) < 0) ? t("errors.negativeUnsigned") :
+              isTooBigToConvert ? t("errors.tooBigToConvert", { bits: bitsLength }) :
+                isTooSmallToConvert ? t("errors.tooSmallToConvert", { bits: bitsLength }) :
                   "";
 
   /////////////////////// Actual Body /////////////////////////////////
@@ -114,10 +117,11 @@ function App() {
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-12 px-4 flex flex-col items-center transition-colors duration-500">
       <div className="w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200 dark:shadow-none overflow-hidden border border-slate-100 dark:border-slate-800 transition-colors">
         <div className="bg-blue-300 dark:bg-blue-600 py-6 px-6 flex flex-col items-start sm:items-center relative">
+          <LanguageSwitcher />
           <button
             onClick={() => setIsDarkMode(!isDarkMode)}
             className="absolute top-4 right-4 p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition-colors border border-white/20"
-            title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            title={isDarkMode ? t("header.themeToggle.toLight") : t("header.themeToggle.toDark")}
           >
             {isDarkMode ? (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sun"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M22 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg>
@@ -135,11 +139,7 @@ function App() {
             </h1>
           </div>
           <p className="text-left sm:text-center text-blue-50/80 dark:text-blue-100/70 text-sm mt-2 font-medium tracking-wide">
-            A simple binary converter that lets you intuitively{" "}
-            <span className="sm:text-white sm:underline sm:decoration-blue-200 sm:dark:decoration-blue-400 sm:underline-offset-4 transition-all">
-              play<span className="hidden sm:inline"> ↑</span>
-            </span>{" "}
-            with bits.
+            {t("header.subtitle")}
           </p>
         </div>
 
@@ -189,7 +189,7 @@ function App() {
             rel="noopener noreferrer"
             className="text-slate-400 dark:text-slate-500 text-[10px] font-mono tracking-wider uppercase hover:text-blue-400 dark:hover:text-blue-500 transition-colors"
           >
-            Open Source on GitHub
+            {t("footer.github")}
           </a>
           <div className="h-px w-8 bg-slate-300 dark:bg-slate-700" />
         </div>

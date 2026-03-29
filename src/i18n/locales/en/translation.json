@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "A simple binary converter that lets you intuitively play with bits.",
+    "themeToggle": {
+      "toDark": "Switch to dark mode",
+      "toLight": "Switch to light mode"
+    }
+  },
+  "inputArea": {
+    "label": "Decimal Value",
+    "copy": "Copy",
+    "copied": "✓ Copied!",
+    "placeholder": "Type an integer from {{min}} to {{max}}"
+  },
+  "bitDisplay": {
+    "label": "Binary Result",
+    "copyBits": "Copy Bits",
+    "copied": "✓ Copied!",
+    "tip": "✨ Tip: Click or swipe across bits to toggle them",
+    "byteLabel": "Byte {{index}} ({{high}} - {{low}})",
+    "bitAriaLabel": "Bit {{position}}, value is {{value}}"
+  },
+  "controls": {
+    "width": {
+      "label": "Width",
+      "tooltip": "Choose how many bits to display (8, 16, or 32)."
+    },
+    "type": {
+      "label": "Type",
+      "tooltip": "Unsigned treats all bits as positive value; Signed uses two's complement.",
+      "unsigned": "unsigned",
+      "signed": "signed"
+    },
+    "action": {
+      "label": "Action",
+      "tooltip": "Flip toggles a single bit; Add increments the value by that bit's weight.",
+      "flip": "flip",
+      "add": "add"
+    }
+  },
+  "errors": {
+    "empty": "Empty input.",
+    "notInteger": "Input is not integer.",
+    "tooBig": "Input is too big to handle.",
+    "tooSmall": "Input is too small to handle.",
+    "negativeUnsigned": "Negative input: Displaying bits as interpreted by the hardware.",
+    "tooBigToConvert": "Input is too big to display, only took {{bits}} LSB.",
+    "tooSmallToConvert": "Input is too small to display, only took {{bits}} LSB."
+  },
+  "footer": {
+    "github": "Open Source on GitHub",
+    "credit": "Built by <accent>Steven Ji</accent> using <accent>Google Antigravity</accent> 2026 // MIT License"
+  },
+  "seo": {
+    "binaryConverter": {
+      "title": "What is a Binary Converter?",
+      "p1": "A <strong>binary converter</strong> is a tool that translates decimal numbers (the base-10 number system we use every day) into binary (base-2), the language of computers. Computers store all information—from text to images—as a series of 0s and 1s, also known as <strong>bits</strong>.",
+      "p2": "Flibit Converter goes beyond basic conversion by letting you <strong>interact with individual bits</strong>. This visual approach helps students and developers understand how changing a single bit affects the overall value of a number."
+    },
+    "twosComplement": {
+      "title": "How Two's Complement Works",
+      "p1": "In computing, we often need to represent negative numbers. The most common method is <strong>Two's Complement</strong>. In this system, the <strong>Most Significant Bit (MSB)</strong> is used as a sign bit.",
+      "unsigned": "<strong>Unsigned:</strong> All bits represent positive values (e.g., bits 0–7 in an 8-bit number represent 1, 2, 4, 8, 16, 32, 64, 128).",
+      "signed": "<strong>Signed:</strong> The MSB represents a negative value (e.g., -128 in an 8-bit number), while the other bits remain positive."
+    },
+    "bitWidths": {
+      "title": "8-bit, 16-bit, and 32-bit conversion",
+      "p1": "The <strong>bit-width</strong> determines the range of numbers a computer can represent:",
+      "8bit": "<strong>8-bit:</strong> 0 to 255 (unsigned) or -128 to 127 (signed).",
+      "16bit": "<strong>16-bit:</strong> 0 to 65,535 (unsigned) or -32,768 to 32,767 (signed).",
+      "32bit": "<strong>32-bit:</strong> 0 to over 4 billion (unsigned) or -2.1 billion to 2.1 billion (signed)."
+    },
+    "whyFlibit": {
+      "title": "Why use Flibit Converter?",
+      "p1": "Many online converters are static. Flibit was designed for <strong>educational exploration</strong>. The \"Paint-to-Toggle\" feature allows you to swipe across multiple bits to see patterns emerge instantly. It's the perfect <strong>bit flip tool</strong> for debugging low-level code or teaching computer architecture."
+    },
+    "terms": {
+      "title": "Common Binary Conversion Terms:",
+      "list": ["LSB", "MSB", "Bit Flipping", "Endianness", "Binary-to-Decimal", "Signed Integer", "Unsigned Integer", "Hexadecimal", "Computer Architecture", "Two's Complement Calculator"]
+    }
+  },
+  "languageSwitcher": {
+    "label": "Language"
+  }
+}

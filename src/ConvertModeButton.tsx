@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import InfoTooltip from "./InfoTooltip";
 
 interface ConvertModeButtonProps {
@@ -18,13 +19,14 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
     clickMode,
     onClickModeChange,
 }) => {
+    const { t } = useTranslation();
     return (
         <div className="flex flex-col gap-3 mx-2 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl transition-colors">
             {/* Row 1: Width Selection */}
             <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1.5 text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase w-16">
-                    Width
-                    <InfoTooltip text="Choose how many bits to display (8, 16, or 32)." />
+                    {t("controls.width.label")}
+                    <InfoTooltip text={t("controls.width.tooltip")} />
                 </span>
                 <div className="flex gap-2">
                     {[8, 16, 32].map(mode => (
@@ -46,11 +48,11 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
             {/* Row 2: Signed Mode Selection */}
             <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1 text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase w-16">
-                    Type
-                    <InfoTooltip text="Unsigned treats all bits as positive value; Signed uses two's complement." />
+                    {t("controls.type.label")}
+                    <InfoTooltip text={t("controls.type.tooltip")} />
                 </span>
                 <div className="flex gap-2">
-                    {["unsigned", "signed"].map(mode => (
+                    {(["unsigned", "signed"] as const).map(mode => (
                         <button
                             key={mode}
                             aria-pressed={isSigned === (mode === "signed")}
@@ -60,7 +62,7 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
                                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700'
                                 }`}
                         >
-                            {mode}
+                            {t(`controls.type.${mode}`)}
                         </button>
                     ))}
                 </div>
@@ -69,21 +71,21 @@ const ConvertModeButton: React.FC<ConvertModeButtonProps> = ({
             {/* Row 3: Click Action Selection */}
             <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1.5 text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase w-16">
-                    Action
-                    <InfoTooltip text="Flip toggles a single bit; Add increments the value by that bit's weight." />
+                    {t("controls.action.label")}
+                    <InfoTooltip text={t("controls.action.tooltip")} />
                 </span>
                 <div className="flex gap-2">
-                    {["flip", "add"].map(mode => (
+                    {(["flip", "add"] as const).map(mode => (
                         <button
                             key={mode}
                             aria-pressed={clickMode === mode}
-                            onClick={() => onClickModeChange(mode as "flip" | "add")}
+                            onClick={() => onClickModeChange(mode)}
                             className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${clickMode === mode
                                 ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm'
                                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700'
                                 }`}
                         >
-                            {mode}
+                            {t(`controls.action.${mode}`)}
                         </button>
                     ))}
                 </div>

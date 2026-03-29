@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface InputAreaProps {
     inputNumber: number | "";
@@ -17,6 +18,7 @@ const InputArea: React.FC<InputAreaProps> = ({
     maxConvertNumber,
     minConvertNumber,
 }) => {
+    const { t } = useTranslation();
     const [copied, setCopied] = React.useState(false);
 
     const handleCopy = () => {
@@ -33,13 +35,13 @@ const InputArea: React.FC<InputAreaProps> = ({
                     htmlFor="decimal-input"
                     className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer"
                 >
-                    Decimal Value
+                    {t("inputArea.label")}
                 </label>
                 <button
                     onClick={handleCopy}
                     className="text-[10px] font-bold text-blue-400 hover:text-blue-500 dark:text-blue-500 dark:hover:text-blue-400 transition-colors uppercase tracking-tight cursor-pointer"
                 >
-                    {copied ? "✓ Copied!" : "Copy"}
+                    {copied ? t("inputArea.copied") : t("inputArea.copy")}
                 </button>
             </div>
             <input
@@ -54,7 +56,7 @@ const InputArea: React.FC<InputAreaProps> = ({
                 max={maxInputNumber}
                 min={minInputNumber}
                 onChange={onInputChange}
-                placeholder={`Type an integer from ${minConvertNumber} to ${maxConvertNumber}`}
+                placeholder={t("inputArea.placeholder", { min: minConvertNumber, max: maxConvertNumber })}
                 id="decimal-input"
                 name="decimal"
                 className="

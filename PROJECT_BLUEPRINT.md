@@ -6,9 +6,9 @@ Flibit Converter is a modern, single-page React application designed to help use
 
 ## Project Structure (v2.3.0+)
 
-- `src/store/useFlibitStore.ts` — **Single Source of Truth**. Contains the global Zustand store (`bitPattern`, `bitsLength`, `isSigned`, `clickMode`) and all business logic actions.
-- `src/store/useFlibitDerived.ts` — Reactive selectors for deriving UI values (binary arrays, error states, bounds) from the store.
+- `src/store/useFlibitStore.ts` — **Single Source of Truth**. Contains the global Zustand store (`bitPattern`, `bitsLength`, `isSigned`, `clickMode`), all business logic actions, and exported derived selectors/hooks used for reactive UI values.
 - `src/components/` — Modular component directory.
+  - `converter/` — core specialized components (`InputArea.tsx`, `BitDisplay.tsx`, `ConvertModeButton.tsx`).
   - `converter/` — core specialized components (`InputArea.tsx`, `BitDisplay.tsx`, `ConvertModeButton.tsx`).
   - `common/` — Generic UI elements (`LanguageSwitcher.tsx`, `InfoTooltip.tsx`, `interactive_logo.tsx`).
   - `layout/` — High-level layout wrappers (`SEOContent.tsx`).

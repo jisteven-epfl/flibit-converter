@@ -34,7 +34,7 @@ function App() {
 
   const {
       isInputEmpty,
-      isInputNoneInteger,
+      isInputNonInteger,
       isInputTooBig,
       isInputTooSmall,
       isTooBigToConvert,
@@ -46,7 +46,7 @@ function App() {
 
   const getErrorMessage = isInputEmpty
     ? t("errors.empty")
-    : isInputNoneInteger
+    : isInputNonInteger
       ? t("errors.notInteger")
       : isInputTooBig
         ? t("errors.tooBig")

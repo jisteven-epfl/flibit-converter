@@ -11,7 +11,7 @@ const BitDisplay: React.FC = () => {
     const {
         binaryArray,
         isInputEmpty,
-        isInputNoneInteger,
+        isInputNonInteger,
         isInputTooBig,
         isInputTooSmall,
         isTooBigToConvert,
@@ -21,7 +21,7 @@ const BitDisplay: React.FC = () => {
 
     const errorMessage = isInputEmpty 
         ? "" 
-        : isInputNoneInteger 
+        : isInputNonInteger 
             ? t("errors.notInteger", "Value must be an integer")
             : isInputTooBig
                 ? t("errors.tooBig", "Value exceeds system limits")

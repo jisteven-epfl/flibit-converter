@@ -125,17 +125,17 @@ export const useFlibitDerived = () => {
 
     const isInputEmpty = inputString === "";
     const inputAsNumber = Number(inputString);
-    const isInputNoneInteger = !isInputEmpty && inputString !== "-" && !Number.isInteger(inputAsNumber);
+    const isInputNonInteger = !isInputEmpty && inputString !== "-" && !Number.isInteger(inputAsNumber);
     
     const isInputTooBig = !isInputEmpty && inputAsNumber > maxInputNumber;
     const isInputTooSmall = !isInputEmpty && inputAsNumber < minInputNumber;
-    const isTooBigToConvert = !isInputEmpty && !isInputNoneInteger && inputString !== "-" && BigInt(inputAsNumber) > maxConvertBigInt;
-    const isTooSmallToConvert = !isInputEmpty && !isInputNoneInteger && inputString !== "-" && BigInt(inputAsNumber) < minConvertBigInt;
+    const isTooBigToConvert = !isInputEmpty && !isInputNonInteger && inputString !== "-" && BigInt(inputAsNumber) > maxConvertBigInt;
+    const isTooSmallToConvert = !isInputEmpty && !isInputNonInteger && inputString !== "-" && BigInt(inputAsNumber) < minConvertBigInt;
 
     const isNegativeUnsigned = !isSigned && inputAsNumber < 0;
 
     const hasError = !isInputEmpty && inputString !== "-" && (
-      isInputNoneInteger ||
+      isInputNonInteger ||
       isInputTooBig ||
       isInputTooSmall ||
       isTooBigToConvert ||
@@ -150,7 +150,7 @@ export const useFlibitDerived = () => {
         hasError,
         minConvertNumber, maxConvertNumber,
         minInputNumber, maxInputNumber,
-        isInputEmpty, isInputNoneInteger, isInputTooBig, isInputTooSmall,
+        isInputEmpty, isInputNonInteger, isInputTooBig, isInputTooSmall,
         isTooBigToConvert, isTooSmallToConvert, isNegativeUnsigned
     };
 };

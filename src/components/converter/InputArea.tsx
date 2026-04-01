@@ -1,33 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useFlibitStore, useFlibitDerived } from "../../store/useFlibitStore";
 
-interface InputAreaProps {
-  inputNumber: number | "";
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  maxInputNumber: number;
-  minInputNumber: number;
-  maxConvertNumber: number;
-  minConvertNumber: number;
-  hasError?: boolean;
-}
-
-const InputArea: React.FC<InputAreaProps> = ({
-  inputNumber,
-  onInputChange,
-  maxInputNumber,
-  minInputNumber,
-  maxConvertNumber,
-  minConvertNumber,
-  hasError = false,
-}) => {
+const InputArea: React.FC = () => {
   const { t } = useTranslation();
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const inputString = useFlibitStore((s) => s.inputString);
+  const onInputChange = useFlibitStore((s) => s.handleInputChange);
+  const onInputBlur = useFlibitStore((s) => s.handleInputBlur);
+  const onInputKeyDown = useFlibitStore((s) => s.handleInputKeyDown);
+
+  const { maxInputNumber, minInputNumber, minConvertNumber, maxConvertNumber, hasError } = useFlibitDerived();
 
   const handleCopy = async () => {
-    if (inputNumber === "") return;
+    if (inputString === "") return;
     
     try {
-      await navigator.clipboard.writeText(String(inputNumber));
+      await navigator.clipboard.writeText(inputString);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -68,27 +58,30 @@ const InputArea: React.FC<InputAreaProps> = ({
           htmlFor="decimal-input"
           className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer"
         >
-          {t("inputArea.label")}
+          {t("inputArea.label", "Decimal Input")}
         </label>
         <button
           onClick={handleCopy}
           className="text-[10px] font-bold text-blue-400 hover:text-blue-500 dark:text-blue-500 dark:hover:text-blue-400 transition-colors uppercase tracking-tight cursor-pointer"
         >
-          {copied ? t("inputArea.copied") : t("inputArea.copy")}
+          {copied ? t("inputArea.copied", "Copied!") : t("inputArea.copy", "Copy")}
         </button>
       </div>
+
       <input
         type="number"
         step="1"
-        value={inputNumber}
+        value={inputString}
         onKeyDown={(e) => {
           if ([".", "e", "E", "+"].includes(e.key)) {
             e.preventDefault();
           }
+          if (onInputKeyDown) onInputKeyDown(e);
         }}
+        onBlur={onInputBlur}
         max={maxInputNumber}
         min={minInputNumber}
-        onChange={onInputChange}
+        onChange={(e) => onInputChange(e.target.value)}
         placeholder={t("inputArea.placeholder", { min: minConvertNumber, max: maxConvertNumber })}
         id="decimal-input"
         name="decimal"

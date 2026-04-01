@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { SUPPORTED_LANGUAGES, STORAGE_KEY, type LanguageCode } from "./i18n/config";
+import { SUPPORTED_LANGUAGES, STORAGE_KEY, type LanguageCode } from "../../i18n/config";
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n, t } = useTranslation();

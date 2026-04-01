@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-04-01
+
+### Added
+- **Global State Management**: Migrated state handling to a scalable `Zustand` global store.
+- **Component Architecture**: Reorganized standard monolithic project structure to feature-first layers (`converter`, `common`, `layout`).
+- **Boundless Mathematical Precision**: Refactored mathematical layer to parse and utilize pure JS 64-bit `BigInt`, preparing logic for infinitely large base shifts and future bounds expansion.
+- **State Derived Selectors**: Added a real-time reactive `useFlibitDerived` selector, stripping prop drilling from `InputArea`, `ConvertModeButton`, and `BitDisplay`.
+
+### Fixed
+- Stabilized and achieved 96% lines test-coverage integrating automated state-reset hooks for test runner isolation.
+
 ## [2.1.1] - 2026-03-24
 
 ### Added

@@ -2,11 +2,21 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../src/App";
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import { useFlibitStore } from "../src/store/useFlibitStore";
 
 describe("App Integration", () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
+    // Reset Zustand store to default state to avoid bleeding between tests
+    useFlibitStore.setState({
+      bitsLength: 8,
+      isSigned: false,
+      clickMode: "flip",
+      bitPattern: 0n,
+      inputString: "0"
+    });
+
     user = userEvent.setup();
     // Clear local storage for reproducible dark mode testing if needed
     localStorage.clear();

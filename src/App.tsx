@@ -1,22 +1,16 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import InputArea from "./InputArea";
-import BitDisplay from "./BitDisplay";
-import ConvertModeButton from "./ConvertModeButton";
-import LanguageSwitcher from "./LanguageSwitcher";
-import { FlipBitInteractive } from "./interactive_logo";
-import {
-  toBinary,
-  toSigned,
-  toUnsigned,
-  simulateHardwareTruncation,
-} from "./utils/math";
-import SEOContent from "./SEOContent";
+import InputArea from "./components/converter/InputArea";
+import BitDisplay from "./components/converter/BitDisplay";
+import ConvertModeButton from "./components/converter/ConvertModeButton";
+import LanguageSwitcher from "./components/common/LanguageSwitcher";
+import { FlipBitInteractive } from "./components/common/interactive_logo";
+import { useFlibitDerived, useFlibitStore } from "./store/useFlibitStore";
+import SEOContent from "./components/layout/SEOContent";
 
 function App() {
   const { t } = useTranslation();
-  const [bitsLength, setBitsLength] = useState<8 | 16 | 32>(8);
-  const [isSigned, setIsSigned] = useState<boolean>(false);
+  
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("flibit-theme");
@@ -37,96 +31,18 @@ function App() {
       localStorage.setItem("flibit-theme", "light");
     }
   }, [isDarkMode]);
-  const [clickMode, setClickMode] = useState<"flip" | "add">("flip");
 
-  const minConvertNumber = isSigned ? -Math.pow(2, bitsLength - 1) : 0;
-  const maxConvertNumber = isSigned
-    ? Math.pow(2, bitsLength - 1) - 1
-    : Math.pow(2, bitsLength) - 1;
-  const maxInputNumber = Number.MAX_SAFE_INTEGER;
-  const minInputNumber = Number.MIN_SAFE_INTEGER;
-
-  const [inputNumber, setInputNumber] = useState<number | "">("");
-  const isInputEmpty = inputNumber === "";
-  const isInputNoneInteger = !Number.isInteger(inputNumber);
-  const isInputTooBig = !isInputEmpty && inputNumber > maxInputNumber;
-  const isInputTooSmall = !isInputEmpty && inputNumber < minInputNumber;
-  const isTooBigToConvert = !isInputEmpty && inputNumber > maxConvertNumber;
-  const isTooSmallToConvert = !isInputEmpty && inputNumber < minConvertNumber;
-  const isInputParsable = !(
-    isInputEmpty ||
-    isInputNoneInteger ||
-    isInputTooBig ||
-    isInputTooSmall
-  );
-
-  // Define error state for visual feedback
-  const hasError =
-    !isInputEmpty &&
-    (isInputNoneInteger ||
-      isInputTooBig ||
-      isInputTooSmall ||
-      isTooBigToConvert ||
-      isTooSmallToConvert);
-
-  const binaryArray = toBinary(
-    isInputParsable ? (inputNumber as number) : 0,
-    bitsLength,
-  );
-
-  /////////////////////// Handle interaction /////////////////////////////////
-
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-
-    if (newValue === "") {
-      setInputNumber("");
-      return;
-    }
-
-    const newValueAsNumber = Number(newValue);
-    setInputNumber(newValueAsNumber);
-  };
-
-  function handleClick(id: number) {
-    if (clickMode === "add") {
-      const position = bitsLength - 1 - id;
-      const addValue = Math.pow(2, position);
-      const currentValue = inputNumber === "" ? 0 : (inputNumber as number);
-
-      // 1. Convert current value to pure unsigned binary equivalent
-      const unsignedCurrent = toUnsigned(currentValue, bitsLength);
-
-      // 2. Perform raw mathematical addition
-      const rawNewNumber = unsignedCurrent + addValue;
-
-      // 3. Perfect Hardware Truncation (using BigInt to avoid JS 32-bit bitwise limits)
-      const truncatedNumber = simulateHardwareTruncation(
-        rawNewNumber,
-        bitsLength,
-      );
-
-      // 4. Convert back to Signed representation if necessary
-      const finalNumber = isSigned
-        ? toSigned(truncatedNumber, bitsLength)
-        : truncatedNumber;
-
-      setInputNumber(finalNumber);
-    } else {
-      // Flip mode: Purely toggle the bit without carrying over
-      const newArray = [...binaryArray];
-      newArray[id] ^= 1; // Toggle the specific bit
-
-      let newNumber = newArray.reduce((acc, bit) => acc * 2 + bit, 0);
-
-      // In signed mode, interpret the most significant bit (MSB) as negative weight
-      if (isSigned && newArray[0] === 1) {
-        newNumber = newNumber - Math.pow(2, bitsLength);
-      }
-
-      setInputNumber(newNumber);
-    }
-  }
+  const {
+      isInputEmpty,
+      isInputNoneInteger,
+      isInputTooBig,
+      isInputTooSmall,
+      isTooBigToConvert,
+      isTooSmallToConvert,
+      isNegativeUnsigned
+  } = useFlibitDerived();
+  
+  const bitsLength = useFlibitStore(s => s.bitsLength);
 
   const getErrorMessage = isInputEmpty
     ? t("errors.empty")
@@ -136,15 +52,13 @@ function App() {
         ? t("errors.tooBig")
         : isInputTooSmall
           ? t("errors.tooSmall")
-          : !isSigned && (inputNumber as number) < 0
+          : isNegativeUnsigned
             ? t("errors.negativeUnsigned")
             : isTooBigToConvert
               ? t("errors.tooBigToConvert", { bits: bitsLength })
               : isTooSmallToConvert
                 ? t("errors.tooSmallToConvert", { bits: bitsLength })
                 : "";
-
-  /////////////////////// Actual Body /////////////////////////////////
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-12 px-4 flex flex-col items-center transition-colors duration-500">
@@ -210,39 +124,15 @@ function App() {
           </p>
         </div>
 
-        {/* hidden span for screen readers to announce errors immediately */}
         <span role="alert" aria-live="polite" className="sr-only">
           {getErrorMessage}
         </span>
 
         <div className="p-6 flex flex-col gap-2 bg-white dark:bg-slate-900 transition-colors">
-          <InputArea
-            inputNumber={inputNumber}
-            onInputChange={handleInput}
-            maxInputNumber={maxInputNumber}
-            minInputNumber={minInputNumber}
-            maxConvertNumber={maxConvertNumber}
-            minConvertNumber={minConvertNumber}
-            hasError={hasError}
-          />
-
-          <ConvertModeButton
-            currentMode={bitsLength}
-            onModeChange={setBitsLength}
-            isSigned={isSigned}
-            onSignedChange={setIsSigned}
-            clickMode={clickMode}
-            onClickModeChange={setClickMode}
-          />
-
+          <InputArea />
+          <ConvertModeButton />
           <div className="h-px bg-slate-100 dark:bg-slate-800 my-4 mx-2" />
-
-          <BitDisplay
-            binaryArray={binaryArray}
-            onBitClick={handleClick}
-            errorMessage={getErrorMessage}
-            bitsLength={bitsLength}
-          />
+          <BitDisplay />
         </div>
       </div>
 

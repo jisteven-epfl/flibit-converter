@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, beforeEach } from "vitest";
 import i18n from "i18next";
-import LanguageSwitcher from "../src/LanguageSwitcher";
+import LanguageSwitcher from "../src/components/common/LanguageSwitcher";
 
 describe("LanguageSwitcher", () => {
   let user: ReturnType<typeof userEvent.setup>;

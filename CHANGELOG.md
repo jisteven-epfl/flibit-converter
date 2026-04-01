@@ -16,6 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Stabilized and achieved 96% lines test-coverage integrating automated state-reset hooks for test runner isolation.
 
+## [2.2.0] - 2026-03-29
+
+### Added
+
+- **Multi-Language Support (i18n)**: Integrated `i18next`/`react-i18next` with English and Chinese translations, a language switcher in the header, and browser/localStorage-based language preference detection. All UI strings are now fully localized via namespaced translation keys. (#31)
+
+### Fixed
+
+- **Visual Error Feedback**: Added a red border and focus ring to the input field when an invalid decimal value is entered, giving users immediate visual feedback on bad input. (#32)
+
 ## [2.1.1] - 2026-03-24
 
 ### Added

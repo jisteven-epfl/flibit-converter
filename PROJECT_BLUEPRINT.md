@@ -2,75 +2,58 @@
 > **AI Usage Note:** This document serves as the living description and building plan for the Flibit Converter project. Any AI assistant tasked with modifying, refactoring, or extending this codebase must read this document first to understand the architecture, purpose of components, and known areas of improvement. Update this document periodically when significant architectural changes are introduced.
 
 ## Introduction
-Flibit Converter is a modern, single-page React application designed to help users interactively convert and visualize binary numbers. Built with Vite, React, TypeScript, and Tailwind CSS, it supports up to 32-bit integer conversion (both signed and unsigned). It allows users to toggle bits using an interactive UI or mathematically add bits to observe bitwise effects. It also features internationalization through `i18next` and dark mode support.
+Flibit Converter is a modern, single-page React application designed to help users interactively convert and visualize binary numbers. Built with Vite, React, TypeScript, and Tailwind CSS, it supports 8, 16, and 32-bit integer conversion (signed and unsigned). It uses a **Zustand** global store for state management and **BigInt** for high-precision mathematical operations.
 
-## Project Index
+## Project Structure (v2.3.0+)
 
-- `package.json` / build scripts — Project configuration and dependencies.
-- `src/` — Main source directory.
-  - `main.tsx` — Application entry point.
-  - `App.tsx` — The main container and logic handler.
-  - `InputArea.tsx` — Component for the decimal input field.
-  - `ConvertModeButton.tsx` — Handles type, bit width, and click mode selection.
-  - `BitDisplay.tsx` — Visualizes the binary array with interactive bits.
-  - `SEOContent.tsx` — SEO optimized static text.
-  - `LanguageSwitcher.tsx` — UI for switching languages.
-  - `InfoTooltip.tsx` — Tooltips providing user guidance on the control interface.
-  - `utils/math.ts` — Contains core math and conversion utility functions.
-  - `interactive_logo.tsx` & `static_logo.tsx` — Logo components.
-  - `i18n/` — Internationalization config and locales.
-- `test/` — Unit testing suite with Vitest.
+- `src/store/useFlibitStore.ts` — **Single Source of Truth**. Contains the global Zustand store (`bitPattern`, `bitsLength`, `isSigned`, `clickMode`) and all business logic actions.
+- `src/store/useFlibitDerived.ts` — Reactive selectors for deriving UI values (binary arrays, error states, bounds) from the store.
+- `src/components/` — Modular component directory.
+  - `converter/` — core specialized components (`InputArea.tsx`, `BitDisplay.tsx`, `ConvertModeButton.tsx`).
+  - `common/` — Generic UI elements (`LanguageSwitcher.tsx`, `InfoTooltip.tsx`, `interactive_logo.tsx`).
+  - `layout/` — High-level layout wrappers (`SEOContent.tsx`).
+- `src/utils/math.ts` — Core BigInt-based mathematical transformations.
+- `test/` — Comprehensive Vitest suite with ~96% line coverage.
 
 ---
 
-## Detailed Component Report
+## Detailed Architectural Report
 
-### 1. `src/App.tsx`
-- **Description:** The root component of the app. It holds all the main state (`inputNumber`, `bitsLength`, `isSigned`, `clickMode`, `isDarkMode`), handles user interactions (input typing, bit clicking), and computes the bounds and errors. 
-- **Current State:** Functional but overloaded. It mixes side effects (dark mode toggling), state management, complex domain logic (bit manipulation), and UI layout in one large file.
-- **Improvements/Problems:** 
-  - **Refactoring target:** The complex bit-flipping and addition logic, along with bounds checking, should be moved into a custom hook (e.g., `useConverterLogic.ts`) to improve testability and separate business logic from the UI.
-  - **Theming:** Dark mode side effects can be decoupled into a `useTheme` hook or a ThemeContext.
+### 1. State Management (Zustand)
+- **Description:** The application state is fully decoupled from the React component tree. Components subscribe only to the slices of state or derived values they need.
+- **Pattern:** Using `useFlibitStore` for raw state and `useFlibitDerived` for complex calculations (like Error Detection and Binary Parsing).
+- **Benefits:** Prevents unnecessary re-renders of the entire `App` component when a single bit is toggled.
 
-### 2. `src/utils/math.ts`
-- **Description:** A utility file handling the pure mathematical transformations (`toUnsigned`, `simulateHardwareTruncation`, `toSigned`, `toBinary`).
-- **Current State:** Uses JS `BigInt` for truncation safely but relies on JS bitwise operators (`>>>`) in `toBinary`.
-- **Improvements/Problems:** 
-  - **Future Proofing:** JavaScript's bitwise operator `>>>` is strictly limited to 32-bit integers. If the app ever expands to 64-bit support, `toBinary` will silently fail. This should be rewritten using `BigInt` shifting if scaling up the feature set.
+### 2. Mathematical Logic (`src/utils/math.ts`)
+- **Description:** All numerical operations are performant and overflow-safe using native `BigInt`.
+- **Functions:**
+  - `simulateHardwareTruncation`: Ensures the pattern always matches the selected bit width (8/16/32).
+  - `toSigned` / `toUnsigned`: Interprets raw bit patterns as decimal values.
+  - `toBinary`: Generates a high-performance bit array for the UI.
 
-### 3. `src/ConvertModeButton.tsx`
-- **Description:** Renders the control switches for Width (8/16/32-bit), Type (Unsigned/Signed), and Action (Flip/Add).
-- **Current State:** Clean presentation component. 
-- **Improvements/Problems:** 
-  - Works well, but currently passes an extensive list of props. If more settings are added, they might benefit from a unified `Settings` object or context.
+### 3. Core Components
 
-### 4. `src/BitDisplay.tsx`
-- **Description:** Responsible for formatting bits into chunks of 8, rendering `BitButton` components with 3D flip animations, and a copy-to-clipboard functionality.
-- **Current State:** Well-implemented with good modularity via the internal `BitButton` subcomponent.
-- **Improvements/Problems:**
-  - Hardcoded layout styles are mostly good, but watch for responsive layout behavior if scaling up to 64-bit arrays.
+#### `BitDisplay.tsx`
+- **Logic:** Subscribes to `binaryArray` from the derived store.
+- **UI:** Features a 3D-perspective "Bit Flip" animation using CSS `backface-visibility`. Supports keyboard navigation (Enter/Space) and "swipe" toggling (click-and-drag).
 
-### 5. `src/InputArea.tsx`
-- **Description:** Simply handles decimal input via an HTML number input, and bounds validation visualization.
-- **Current State:** Good, lightweight component.
-- **Improvements/Problems:**
-  - Logic relies on parent (`App.tsx`) to pass bounds and errors.
+#### `InputArea.tsx`
+- **Logic:** Connected to `inputString` and `handleInputChange`. Validates against `maxConvertNumber` and `minConvertNumber` derived states.
+- **UI:** Large, high-impact typography with reactive error styling.
 
-### 6. `src/InfoTooltip.tsx`
-- **Description:** A portal-based reusable tooltip component triggered on hover/focus.
-- **Improvements/Problems:** 
-  - Handles scroll and resize events cleanly, minimal issues. Keep an eye on memory leaks if unmounting isn't clean strictly (though useEffect cleanup handles this).
+#### `ConvertModeButton.tsx`
+- **Logic:** Directly updates store settings (`setBitsLength`, `setIsSigned`, `setClickMode`).
+- **UI:** Segmented controls and custom dropdowns with interactive tooltips.
 
-### 7. Localization (`LanguageSwitcher.tsx`, `i18n/config.ts`)
-- **Description:** Enables easy transitions between languages using `react-i18next`.
-- **Improvements/Problems:** The setup is sound.
+### 4. Internationalization & SEO
+- **i18n:** Fully integrated using `react-i18next`. Localization files reside in `src/i18n/`.
+- **SEO:** `SEOContent.tsx` provides high-density keywords and educational context (Two's Complement, Binary history) to improve search engine rankings.
 
 ---
 
-## Conclusion & Proposed Refactor Roadmap
+## Technical Debt & Future Roadmap
 
-For upcoming feature additions, it is highly recommended to perform a controlled refactor with the following steps:
-1. **Extract Custom Hooks:** Pull `useConverter` logic and `useTheme` out of `App.tsx`.
-2. **Upgrade Math Functions:** Fortify `utils/math.ts` against potential >32-bit numbers using native `BigInt` consistently everywhere.
-3. **Enhance Test Coverage:** Ensure tests are present for the newly extracted hooks and all mathematical boundaries.
-4. **Architectural Restructuring:** Introduce Context API (or Zustand/Redux if state gets heavier) instead of prop-drilling for settings.
+1. **Dashboard Expansion:** The current card-based UI is ready to be expanded into a dashboard with a sidebar for "History" and "Bitwise Tools" (AND, OR, NOT).
+2. **Additional Bases:** Logic is primed for Hexadecimal and Octal input/output support via the existing Zustand store.
+3. **Floating Point:** Planned support for IEEE 754 (Float16/32/64) visualization. This will require new utility functions in `math.ts` to handle mantissa and exponent parsing.
+4. **Visual Polish:** Transition the core layout to a more premium, glassmorphism-inspired design (as outlined in `UI_IDEAS.md`).

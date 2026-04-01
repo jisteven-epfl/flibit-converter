@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, test, expect, vi } from "vitest";
+import { describe, test, expect } from "vitest";
 import InfoTooltip from "../src/components/common/InfoTooltip";
 
 describe("InfoTooltip", () => {

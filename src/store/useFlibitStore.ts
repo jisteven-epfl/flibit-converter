@@ -67,7 +67,9 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
           const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
           set({ bitPattern: truncated });
       }
-    } catch {}
+    } catch (e) {
+      // Ignore parsing errors for partial input
+    }
   },
 
   handleBitClick: (id) => {

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { FlipBitInteractive } from "../src/components/common/interactive_logo";

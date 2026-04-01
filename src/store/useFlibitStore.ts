@@ -136,15 +136,18 @@ export const useFlibitDerived = () => {
     const maxInputNumber = Number.MAX_SAFE_INTEGER;
 
     const isInputEmpty = inputString === "";
-    const inputAsNumber = Number(inputString);
-    const isInputNonInteger = !isInputEmpty && inputString !== "-" && !Number.isInteger(inputAsNumber);
-    
-    const isInputTooBig = !isInputEmpty && inputAsNumber > maxInputNumber;
-    const isInputTooSmall = !isInputEmpty && inputAsNumber < minInputNumber;
-    const isTooBigToConvert = !isInputEmpty && !isInputNonInteger && inputString !== "-" && BigInt(inputAsNumber) > maxConvertBigInt;
-    const isTooSmallToConvert = !isInputEmpty && !isInputNonInteger && inputString !== "-" && BigInt(inputAsNumber) < minConvertBigInt;
+    const isPlainInteger = /^-?\d+$/.test(inputString);
+    const isInputNonInteger = !isInputEmpty && inputString !== "-" && !isPlainInteger;
 
-    const isNegativeUnsigned = !isSigned && inputAsNumber < 0;
+    // Parse directly from string to avoid precision loss (only for valid plain integers)
+    const inputAsBigInt = isPlainInteger ? BigInt(inputString) : null;
+
+    const isInputTooBig = inputAsBigInt !== null && inputAsBigInt > BigInt(maxInputNumber);
+    const isInputTooSmall = inputAsBigInt !== null && inputAsBigInt < BigInt(minInputNumber);
+    const isTooBigToConvert = inputAsBigInt !== null && inputAsBigInt > maxConvertBigInt;
+    const isTooSmallToConvert = inputAsBigInt !== null && inputAsBigInt < minConvertBigInt;
+
+    const isNegativeUnsigned = !isSigned && inputAsBigInt !== null && inputAsBigInt < 0n;
 
     const hasError = !isInputEmpty && inputString !== "-" && (
       isInputNonInteger ||

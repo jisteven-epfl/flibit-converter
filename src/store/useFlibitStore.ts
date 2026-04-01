@@ -47,9 +47,14 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
   setClickMode: (mode) => set({ clickMode: mode }),
 
   handleInputChange: (val) => {
+    if (val === "") {
+      set({ inputString: val, bitPattern: 0n });
+      return;
+    }
+
     set({ inputString: val });
 
-    if (val === "" || val === "-") return;
+    if (val === "-") return;
 
     // Only accept plain signed decimal integers (no scientific notation, etc.)
     if (!/^-?\d+$/.test(val)) return;

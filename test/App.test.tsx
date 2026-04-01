@@ -91,6 +91,25 @@ describe("App Integration", () => {
     ).toBeInTheDocument();
   });
 
+  it("should reset bitPattern to 0 when input is cleared", async () => {
+    render(<App />);
+    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+
+    // Type a non-zero value so bits are set
+    await user.type(input, "42");
+    expect(useFlibitStore.getState().bitPattern).toBe(42n);
+
+    // Clear the input — bitPattern must reset to 0n
+    await user.clear(input);
+    expect(input.value).toBe("");
+    expect(useFlibitStore.getState().bitPattern).toBe(0n);
+
+    // Bit display should show all zeros
+    expect(
+      screen.getByRole("button", { name: "Bit 0, value is 0" }),
+    ).toBeInTheDocument();
+  });
+
   it("should validate InputArea logic correctly", async () => {
     render(<App />);
     const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;

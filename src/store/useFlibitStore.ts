@@ -57,15 +57,27 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
     try {
       const state = get();
       const bigVal = BigInt(val);
-      
-      const minConvertBigInt = state.isSigned ? -(1n << BigInt(state.bitsLength - 1)) : 0n;
-      const maxConvertBigInt = state.isSigned
-        ? (1n << BigInt(state.bitsLength - 1)) - 1n
-        : (1n << BigInt(state.bitsLength)) - 1n;
+      const bitsLengthBigInt = BigInt(state.bitsLength);
 
-      if (bigVal >= minConvertBigInt && bigVal <= maxConvertBigInt) {
+      if (state.isSigned) {
+        const minConvertBigInt = -(1n << (bitsLengthBigInt - 1n));
+        const maxConvertBigInt = (1n << (bitsLengthBigInt - 1n)) - 1n;
+
+        if (bigVal >= minConvertBigInt && bigVal <= maxConvertBigInt) {
           const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
           set({ bitPattern: truncated });
+        }
+      } else {
+        const maxConvertBigInt = (1n << bitsLengthBigInt) - 1n;
+
+        if (bigVal >= 0n && bigVal <= maxConvertBigInt) {
+          const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
+          set({ bitPattern: truncated });
+        } else if (bigVal < 0n) {
+          // In unsigned mode, interpret negative input as truncated hardware pattern.
+          const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
+          set({ bitPattern: truncated });
+        }
       }
     } catch {
       // Ignore parsing errors for partial input string states ("-", empty, etc)

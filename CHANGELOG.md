@@ -8,12 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.3.0] - 2026-04-01
 
 ### Added
+
 - **Global State Management**: Migrated state handling to a scalable `Zustand` global store.
 - **Component Architecture**: Reorganized standard monolithic project structure to feature-first layers (`converter`, `common`, `layout`).
 - **Boundless Mathematical Precision**: Refactored mathematical layer to parse and utilize pure JS 64-bit `BigInt`, preparing logic for infinitely large base shifts and future bounds expansion.
 - **State Derived Selectors**: Added a real-time reactive `useFlibitDerived` selector, stripping prop drilling from `InputArea`, `ConvertModeButton`, and `BitDisplay`.
 
 ### Fixed
+
 - Stabilized and achieved 96% lines test-coverage integrating automated state-reset hooks for test runner isolation.
 
 ## [2.2.0] - 2026-03-29
@@ -47,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.0] - 2026-03-24
 
 ### Added
+
 - **16-bit & 32-bit Conversions**: Added support to switch between 8-bit, 16-bit, and 32-bit conversion modes.
 - **Signed vs Unsigned**: Added the ability to choose between signed (Two's Complement) and unsigned conversion targets.
 - **Docker Support & CI/CD**: Added `Dockerfile` and automated GitHub Actions workflows (CI, CodeCov, GitHub Packages) for container image publishing to GHCR.
@@ -58,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Interactive Logo**: Added a notebook-style flip-calendar logo that physically animates when clicked, reflecting the "bit-flip" core concept.
 
 ### Changed
+
 - **The "Flibit" Story**: Updated README to explain the brand’s origin (a playful reversal of "bit flip") and its inspiration from hardware-level state changes.
 - **Bilingual Polish**: Refined both English and Chinese descriptions for clarity and natural flow.
 - **UI & Layout Stability**: Refactored to a polished card-style layout with fixed containers to prevent flexbox jittering when tooltips or scrollbars appear.
@@ -66,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Derived State Reactivity**: Decomposed the legacy `App` component into modular units (`InputArea` and `BitDisplay`), abandoning redundant mutable state flags in favor of clean derived state for input validation.
 
 ### Fixed
+
 - Fixed improper coloring of the "Flip" and "Add" buttons when Dark Mode is enabled.
 - Resolved layout display inconsistency for the title on small mobile viewports.
 - Fixed error message display behaviors during text input validation.

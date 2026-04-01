@@ -50,13 +50,13 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
     set({ inputString: val });
 
     if (val === "" || val === "-") return;
-    
-    const parsed = Number(val);
-    if (!Number.isInteger(parsed)) return;
+
+    // Only accept plain signed decimal integers (no scientific notation, etc.)
+    if (!/^-?\d+$/.test(val)) return;
 
     try {
       const state = get();
-      const bigVal = BigInt(parsed);
+      const bigVal = BigInt(val);
       
       const minConvertBigInt = state.isSigned ? -(1n << BigInt(state.bitsLength - 1)) : 0n;
       const maxConvertBigInt = state.isSigned

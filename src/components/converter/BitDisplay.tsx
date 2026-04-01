@@ -1,21 +1,40 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useFlibitStore, useFlibitDerived } from "../../store/useFlibitStore";
 
-interface BitDisplayProps {
-    binaryArray: number[];
-    onBitClick: (id: number) => void;
-    errorMessage: string;
-    bitsLength: number;
-}
-
-const BitDisplay: React.FC<BitDisplayProps> = ({
-    binaryArray,
-    onBitClick,
-    errorMessage,
-    bitsLength,
-}) => {
+const BitDisplay: React.FC = () => {
     const { t } = useTranslation();
     const [copied, setCopied] = React.useState(false);
+
+    const bitsLength = useFlibitStore(s => s.bitsLength);
+    const onBitClick = useFlibitStore(s => s.handleBitClick);
+    const {
+        binaryArray,
+        isInputEmpty,
+        isInputNonInteger,
+        isInputTooBig,
+        isInputTooSmall,
+        isTooBigToConvert,
+        isTooSmallToConvert,
+        isNegativeUnsigned
+    } = useFlibitDerived();
+
+    const errorMessage = isInputEmpty 
+        ? "" 
+        : isInputNonInteger 
+            ? t("errors.notInteger", "Value must be an integer")
+            : isInputTooBig
+                ? t("errors.tooBig", "Value exceeds system limits")
+                : isInputTooSmall
+                    ? t("errors.tooSmall", "Value is below system limits")
+                    : isNegativeUnsigned
+                        ? t("errors.negativeUnsigned", "Unsigned cannot be negative")
+                        : isTooBigToConvert
+                            ? t("errors.tooBigToConvert", { bits: bitsLength, defaultValue: `Too big for ${bitsLength} bits` })
+                            : isTooSmallToConvert
+                                ? t("errors.tooSmallToConvert", { bits: bitsLength, defaultValue: `Too small for ${bitsLength} bits` })
+                                : "";
+
 
     const handleCopyBinary = () => {
         const binaryString = binaryArray.join("");

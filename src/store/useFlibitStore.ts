@@ -68,7 +68,10 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
 
     set({ inputString: val });
 
-    if (val === "-") return;
+if (val === "-") {
+  if (get().currentBase !== 10) return;
+  return;
+}
 
     const base = get().currentBase;
     const isNegativeAllowed = base === 10;

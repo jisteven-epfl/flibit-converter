@@ -14,7 +14,8 @@ describe("App Integration", () => {
       isSigned: false,
       clickMode: "flip",
       bitPattern: 0n,
-      inputString: "0"
+      inputString: "0",
+      currentBase: 10
     });
 
     user = userEvent.setup();

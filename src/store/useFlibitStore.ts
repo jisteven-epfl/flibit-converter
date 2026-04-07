@@ -86,42 +86,16 @@ if (val === "-") {
 
     try {
       const state = get();
-      const bitsLengthBigInt = BigInt(state.bitsLength);
-      
+
       let bigVal: bigint;
       if (base === 10) bigVal = BigInt(val);
       else if (base === 16) bigVal = BigInt("0x" + val);
       else if (base === 8) bigVal = BigInt("0o" + val);
       else bigVal = BigInt("0b" + val);
 
-      if (base === 10) {
-        if (state.isSigned) {
-          const minConvertBigInt = -(1n << (bitsLengthBigInt - 1n));
-          const maxConvertBigInt = (1n << (bitsLengthBigInt - 1n)) - 1n;
-
-          if (bigVal >= minConvertBigInt && bigVal <= maxConvertBigInt) {
-            const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
-            set({ bitPattern: truncated });
-          }
-        } else {
-          const maxConvertBigInt = (1n << bitsLengthBigInt) - 1n;
-
-          if (bigVal >= 0n && bigVal <= maxConvertBigInt) {
-            const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
-            set({ bitPattern: truncated });
-          } else if (bigVal < 0n) {
-            const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
-            set({ bitPattern: truncated });
-          }
-        }
-      } else {
-        // Hex, Oct, Bin directly map to raw limits, not signed limits
-        const maxUnsignedBigInt = (1n << bitsLengthBigInt) - 1n;
-        if (bigVal >= 0n && bigVal <= maxUnsignedBigInt) {
-            const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
-            set({ bitPattern: truncated });
-        }
-      }
+      // Always truncate to fit the current bit width and set the bit pattern.
+      // Error flags in useFlibitDerived indicate out-of-range / truncation conditions.
+      set({ bitPattern: simulateHardwareTruncation(bigVal, state.bitsLength) });
     } catch {
       // Ignore parsing errors for partial input string states ("-", empty, etc)
     }

@@ -15,10 +15,10 @@ describe("FlipBitInteractive", () => {
   test("flips the bit upon clicking and handles animation lock", () => {
     render(<FlipBitInteractive />);
 
-    // Initially should display '0'
+    // Wait for internal SVG or text to render
     expect(screen.getByText("0")).toBeDefined();
-    
-    const container = screen.getByTitle("Click me!");
+
+    const container = screen.getByTestId("flip-logo");
 
     // Click it
     fireEvent.click(container);

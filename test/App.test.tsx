@@ -14,7 +14,8 @@ describe("App Integration", () => {
       isSigned: false,
       clickMode: "flip",
       bitPattern: 0n,
-      inputString: "0"
+      inputString: "0",
+      currentBase: 10
     });
 
     user = userEvent.setup();
@@ -115,6 +116,7 @@ describe("App Integration", () => {
     const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
 
     // Try an input too big for 8-bit unsigned (max 255)
+    await user.clear(input);
     await user.type(input, "256");
     expect(input.value).toBe("256");
 
@@ -124,7 +126,7 @@ describe("App Integration", () => {
     ).toBeInTheDocument();
 
     // Should have error class for out-of-range input
-    expect(input).toHaveClass("border-red-400");
+    expect(input.parentElement).toHaveClass("border-red-400");
 
     // Try clearing
     await user.clear(input);
@@ -132,6 +134,7 @@ describe("App Integration", () => {
     expect(screen.getAllByText(/Empty input./i)[0]).toBeInTheDocument();
 
     // Try negative input for unsigned
+    await user.clear(input);
     await user.type(input, "-1");
     expect(
       screen.getAllByText(
@@ -154,7 +157,7 @@ describe("App Integration", () => {
     ).toBeInTheDocument();
 
     // Check if error class is applied
-    expect(input).toHaveClass("border-red-400");
+    expect(input.parentElement).toHaveClass("border-red-400");
   });
 
   it("should toggle theme and persist to localStorage", async () => {
@@ -200,6 +203,7 @@ describe("App Integration", () => {
 
     render(<App />);
     const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    await user.clear(input);
     await user.type(input, "42");
 
     // Copy decimal
@@ -232,4 +236,36 @@ describe("App Integration", () => {
     const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
     expect(input.value).toBe("3"); // Bit 0 (1) + Bit 1 (2) = 3
   });
+
+  it("should cycle through multi-base modes (DEC -> BIN -> OCT -> HEX) and sync inputs", async () => {
+    render(<App />);
+    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, "10"); // 10 decimal
+    expect(useFlibitStore.getState().bitPattern).toBe(10n);
+
+    // Initial button should say DEC
+    const baseBtn = screen.getByRole("button", { name: "DEC" });
+    expect(baseBtn).toBeInTheDocument();
+
+    // Cycle 1: BIN
+    await user.click(baseBtn);
+    expect(screen.getByRole("button", { name: "BIN" })).toBeInTheDocument();
+    expect(input.value).toBe("1010"); // 10 in binary
+
+    // Cycle 2: OCT
+    await Promise.resolve(); // flush
+    const binBtn = screen.getByRole("button", { name: "BIN" });
+    await user.click(binBtn);
+    expect(screen.getByRole("button", { name: "OCT" })).toBeInTheDocument();
+    expect(input.value).toBe("12"); // 10 in octal
+
+    // Cycle 3: HEX
+    await Promise.resolve();
+    const octBtn = screen.getByRole("button", { name: "OCT" });
+    await user.click(octBtn);
+    expect(screen.getByRole("button", { name: "HEX" })).toBeInTheDocument();
+    expect(input.value.toLowerCase()).toBe("a"); // 10 in hex
+  });
 });
+

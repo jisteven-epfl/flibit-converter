@@ -12,7 +12,7 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <div className="absolute top-4 left-4 flex items-center gap-1.5" aria-label={t("languageSwitcher.label")}>
+    <div className="flex items-center gap-1.5" aria-label={t("languageSwitcher.label")}>
       {SUPPORTED_LANGUAGES.map((lang) => (
         <button
           key={lang.code}

@@ -7,11 +7,13 @@ interface FlibitState {
   clickMode: "flip" | "add";
   bitPattern: bigint;
   inputString: string;
+  currentBase: 10 | 16 | 8 | 2;
   
   // Actions
   setBitsLength: (length: 8 | 16 | 32) => void;
   setIsSigned: (isSigned: boolean) => void;
   setClickMode: (mode: "flip" | "add") => void;
+  setCurrentBase: (base: 10 | 16 | 8 | 2) => void;
   handleInputChange: (val: string) => void;
   handleInputBlur: () => void;
   handleInputKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -20,11 +22,17 @@ interface FlibitState {
 }
 
 // Internal helper so we don't expose it
-function getSyncedInputString(state: Pick<FlibitState, 'isSigned' | 'bitPattern' | 'bitsLength'>): string {
-  const currentDecimalBigInt = state.isSigned 
-    ? toSigned(state.bitPattern, state.bitsLength)
-    : simulateHardwareTruncation(state.bitPattern, state.bitsLength);
-  return currentDecimalBigInt.toString();
+function getSyncedInputString(state: Pick<FlibitState, 'isSigned' | 'bitPattern' | 'bitsLength' | 'currentBase'>): string {
+  if (state.currentBase === 10) {
+    const currentDecimalBigInt = state.isSigned 
+      ? toSigned(state.bitPattern, state.bitsLength)
+      : simulateHardwareTruncation(state.bitPattern, state.bitsLength);
+    return currentDecimalBigInt.toString();
+  } else {
+    const unsignedBigInt = simulateHardwareTruncation(state.bitPattern, state.bitsLength);
+    const str = unsignedBigInt.toString(state.currentBase);
+    return state.currentBase === 16 ? str.toUpperCase() : str;
+  }
 }
 
 export const useFlibitStore = create<FlibitState>((set, get) => ({
@@ -33,6 +41,7 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
   clickMode: "flip",
   bitPattern: 0n,
   inputString: "0",
+  currentBase: 10,
 
   setBitsLength: (length) => set((state) => {
     const newState = { ...state, bitsLength: length };
@@ -46,6 +55,11 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
 
   setClickMode: (mode) => set({ clickMode: mode }),
 
+  setCurrentBase: (base) => set((state) => {
+    const newState = { ...state, currentBase: base };
+    return { currentBase: base, inputString: getSyncedInputString(newState) };
+  }),
+
   handleInputChange: (val) => {
     if (val === "") {
       set({ inputString: val, bitPattern: 0n });
@@ -54,36 +68,34 @@ export const useFlibitStore = create<FlibitState>((set, get) => ({
 
     set({ inputString: val });
 
-    if (val === "-") return;
+if (val === "-") {
+  if (get().currentBase !== 10) return;
+  return;
+}
 
-    // Only accept plain signed decimal integers (no scientific notation, etc.)
-    if (!/^-?\d+$/.test(val)) return;
+    const base = get().currentBase;
+    const isNegativeAllowed = base === 10;
+    
+    if (!isNegativeAllowed && val.includes('-')) return;
+
+    // validation per base
+    if (base === 10 && !/^-?\d+$/.test(val)) return;
+    if (base === 16 && !/^[0-9a-fA-F]+$/.test(val)) return;
+    if (base === 8 && !/^[0-7]+$/.test(val)) return;
+    if (base === 2 && !/^[01]+$/.test(val)) return;
 
     try {
       const state = get();
-      const bigVal = BigInt(val);
-      const bitsLengthBigInt = BigInt(state.bitsLength);
 
-      if (state.isSigned) {
-        const minConvertBigInt = -(1n << (bitsLengthBigInt - 1n));
-        const maxConvertBigInt = (1n << (bitsLengthBigInt - 1n)) - 1n;
+      let bigVal: bigint;
+      if (base === 10) bigVal = BigInt(val);
+      else if (base === 16) bigVal = BigInt("0x" + val);
+      else if (base === 8) bigVal = BigInt("0o" + val);
+      else bigVal = BigInt("0b" + val);
 
-        if (bigVal >= minConvertBigInt && bigVal <= maxConvertBigInt) {
-          const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
-          set({ bitPattern: truncated });
-        }
-      } else {
-        const maxConvertBigInt = (1n << bitsLengthBigInt) - 1n;
-
-        if (bigVal >= 0n && bigVal <= maxConvertBigInt) {
-          const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
-          set({ bitPattern: truncated });
-        } else if (bigVal < 0n) {
-          // In unsigned mode, interpret negative input as truncated hardware pattern.
-          const truncated = simulateHardwareTruncation(bigVal, state.bitsLength);
-          set({ bitPattern: truncated });
-        }
-      }
+      // Always truncate to fit the current bit width and set the bit pattern.
+      // Error flags in useFlibitDerived indicate out-of-range / truncation conditions.
+      set({ bitPattern: simulateHardwareTruncation(bigVal, state.bitsLength) });
     } catch {
       // Ignore parsing errors for partial input string states ("-", empty, etc)
     }
@@ -128,24 +140,40 @@ export const useFlibitDerived = () => {
     const bitsLength = useFlibitStore(s => s.bitsLength);
     const isSigned = useFlibitStore(s => s.isSigned);
     const inputString = useFlibitStore(s => s.inputString);
+    const currentBase = useFlibitStore(s => s.currentBase);
     const bitPattern = useFlibitStore(s => s.bitPattern);
     
-    const minConvertBigInt = isSigned ? -(1n << BigInt(bitsLength - 1)) : 0n;
-    const maxConvertBigInt = isSigned
+    // Bounds depend on base
+    const minConvertBigInt = (isSigned && currentBase === 10) ? -(1n << BigInt(bitsLength - 1)) : 0n;
+    const maxConvertBigInt = (isSigned && currentBase === 10)
       ? (1n << BigInt(bitsLength - 1)) - 1n
       : (1n << BigInt(bitsLength)) - 1n;
 
     const minConvertNumber = Number(minConvertBigInt);
     const maxConvertNumber = Number(maxConvertBigInt);
-    const minInputNumber = Number.MIN_SAFE_INTEGER;
-    const maxInputNumber = Number.MAX_SAFE_INTEGER;
+    
+    // Abstract limits
+    const minInputNumber = currentBase === 10 ? Number.MIN_SAFE_INTEGER : 0;
+    const maxInputNumber = currentBase === 10 ? Number.MAX_SAFE_INTEGER : Number(maxConvertBigInt);
 
     const isInputEmpty = inputString === "";
-    const isPlainInteger = /^-?\d+$/.test(inputString);
+    
+    let isPlainInteger = false;
+    if (currentBase === 10) isPlainInteger = /^-?\d+$/.test(inputString);
+    else if (currentBase === 16) isPlainInteger = /^[0-9a-fA-F]+$/.test(inputString);
+    else if (currentBase === 8) isPlainInteger = /^[0-7]+$/.test(inputString);
+    else if (currentBase === 2) isPlainInteger = /^[01]+$/.test(inputString);
+
     const isInputNonInteger = !isInputEmpty && inputString !== "-" && !isPlainInteger;
 
     // Parse directly from string to avoid precision loss (only for valid plain integers)
-    const inputAsBigInt = isPlainInteger ? BigInt(inputString) : null;
+    let inputAsBigInt: bigint | null = null;
+    if (isPlainInteger) {
+        if (currentBase === 10) inputAsBigInt = BigInt(inputString);
+        else if (currentBase === 16) inputAsBigInt = BigInt("0x" + inputString);
+        else if (currentBase === 8) inputAsBigInt = BigInt("0o" + inputString);
+        else inputAsBigInt = BigInt("0b" + inputString);
+    }
 
     const isInputTooBig = inputAsBigInt !== null && inputAsBigInt > BigInt(maxInputNumber);
     const isInputTooSmall = inputAsBigInt !== null && inputAsBigInt < BigInt(minInputNumber);

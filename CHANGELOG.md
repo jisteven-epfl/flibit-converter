@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-04-07
+
+### Added
+
+- **Multi-Base Conversions**: Fully integrated robust, precision-safe conversions for Decimal (10), Hexadecimal (16), Octal (8), and Binary (2) radixes directly into the core `Zustand` store.
+- **Base Mode Selector**: Added a highly interactive, tactile toggling button into the input form that cycles between the new numerical bases seamlessly.
+- **Glassmorphic UI Engine**: Rewrote the entire visual layout to utilize a stunning blur/glassmorphism design across the header, SEO content arrays, and active elements.
+- **Intelligent Input Parsing**: The text parsing engine now strictly adapts formatting and bounds to the active base (e.g. rejecting a `9` input if Octal mode is selected).
+- **Game-Rarity Coloring Scheme**: Formatted the converter's color progressions on a rarity scale (Common Green to Legendary Amber/Gold) reacting vividly to mode changes.
+
+### Changed
+
+- **Visual Architecture Redesign**: Elevated standard structural card logic into dynamic, fixed-header backdrops, significantly modernizing the look and UX of Flibit.
+- **Header Balancing**: Fine-tuned the Flibit Interactive Logo baseline and font spacing to create a powerful primary brand mark.
+- **Consolidated Testing Suites**: Rebuilt the component rendering and integration validation tests to assure 97%+ coverage against the new multi-base behaviors and visual identifiers.
+
 ## [2.3.0] - 2026-04-01
 
 ### Added

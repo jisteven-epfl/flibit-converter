@@ -20,10 +20,17 @@ export default function Header({ isDarkMode, setIsDarkMode }: HeaderProps) {
           <div className="mt-2">
             <FlipBitInteractive sizeClass="w-[32px]" />
           </div>
-          <h1 className="font-extrabold text-white text-3xl tracking-tight leading-none relative -top-3">
+          <a 
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="font-extrabold text-white text-3xl tracking-tight leading-none relative -top-3 cursor-pointer select-none"
+          >
             <span>Flibit</span>
             <span className="ml-[8px] hidden sm:inline-block font-medium opacity-80 text-3xl">converter</span>
-          </h1>
+          </a>
         </div>
 
         {/* Right Side: GitHub, Theme, Language */}

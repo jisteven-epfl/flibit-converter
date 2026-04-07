@@ -219,6 +219,35 @@ describe("App Integration", () => {
     expect(mockWriteText).toHaveBeenCalledWith("00101010");
   });
 
+  it("should not jitter layout when toggling TYPE or ACTION buttons (border always present)", async () => {
+    render(<App />);
+
+    // TYPE buttons: "unsigned" is active by default, "signed" is inactive
+    const unsignedBtn = screen.getByRole("button", { name: /^unsigned$/i });
+    const signedBtn = screen.getByRole("button", { name: /^signed$/i });
+
+    // Both active and inactive buttons must always carry a border class
+    expect(unsignedBtn.className).toMatch(/border/);
+    expect(signedBtn.className).toMatch(/border/);
+
+    // Click "signed" — it becomes active; "unsigned" becomes inactive
+    await user.click(signedBtn);
+    expect(signedBtn.className).toMatch(/border/);
+    expect(unsignedBtn.className).toMatch(/border/);
+
+    // ACTION buttons: "flip" is active by default, "add" is inactive
+    const flipBtn = screen.getByRole("button", { name: /^flip$/i });
+    const addBtn = screen.getByRole("button", { name: /^add$/i });
+
+    expect(flipBtn.className).toMatch(/border/);
+    expect(addBtn.className).toMatch(/border/);
+
+    // Click "add" — it becomes active; "flip" becomes inactive
+    await user.click(addBtn);
+    expect(addBtn.className).toMatch(/border/);
+    expect(flipBtn.className).toMatch(/border/);
+  });
+
   it("should simulate swipe-to-toggle logic", () => {
     render(<App />);
 

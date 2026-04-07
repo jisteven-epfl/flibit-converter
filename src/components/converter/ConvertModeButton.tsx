@@ -28,7 +28,7 @@ const ConvertModeButton: React.FC = () => {
                             aria-pressed={currentMode === mode}
                             onClick={() => onModeChange(mode as 8 | 16 | 32)}
                             className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${currentMode === mode
-                                ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm'
+                                ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm border border-transparent'
                                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700'
                                 }`}
                         >
@@ -51,7 +51,7 @@ const ConvertModeButton: React.FC = () => {
                             aria-pressed={isSigned === (mode === "signed")}
                             onClick={() => onSignedChange(mode === "signed")}
                             className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${isSigned === (mode === "signed")
-                                ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm'
+                                ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm border border-transparent'
                                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700'
                                 }`}
                         >
@@ -74,7 +74,7 @@ const ConvertModeButton: React.FC = () => {
                             aria-pressed={clickMode === mode}
                             onClick={() => onClickModeChange(mode)}
                             className={`px-3 py-1 text-sm rounded-md transition-all font-medium ${clickMode === mode
-                                ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm'
+                                ? 'bg-blue-300 dark:bg-blue-600 text-white shadow-sm border border-transparent'
                                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm border border-slate-100 dark:border-slate-700'
                                 }`}
                         >

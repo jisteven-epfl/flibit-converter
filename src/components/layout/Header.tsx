@@ -24,7 +24,7 @@ export default function Header({ isDarkMode, setIsDarkMode }: HeaderProps) {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+window?.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="font-extrabold text-white text-3xl tracking-tight leading-none relative -top-3 cursor-pointer select-none"
           >

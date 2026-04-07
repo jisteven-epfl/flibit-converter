@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 export default function SEOContent() {
   const { t } = useTranslation();
@@ -11,8 +11,8 @@ export default function SEOContent() {
         <div className="flex flex-col md:flex-row items-center gap-8">
           <section className="flex-1">
             <h2 className="text-2xl font-black mb-4 text-slate-800 dark:text-slate-200 tracking-tight">{t("seo.binaryConverter.title")}</h2>
-            <p className="mb-4 leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: t("seo.binaryConverter.p1") }} />
-            <p className="leading-relaxed opacity-80" dangerouslySetInnerHTML={{ __html: t("seo.binaryConverter.p2") }} />
+            <p className="mb-4 leading-relaxed text-lg"><Trans i18nKey="seo.binaryConverter.p1" /></p>
+            <p className="leading-relaxed opacity-80"><Trans i18nKey="seo.binaryConverter.p2" /></p>
           </section>
           <div className="flex-1 w-full bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-6 rounded-3xl border border-white/40 dark:border-slate-800/60 shadow-xl shadow-slate-200/20 dark:shadow-none">
             <div className="h-40 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-50 dark:from-blue-900/40 dark:to-indigo-900/20 flex flex-col items-center justify-center border border-blue-200/50 dark:border-blue-800/50">
@@ -26,10 +26,10 @@ export default function SEOContent() {
         <div className="flex flex-col md:flex-row-reverse items-center gap-8">
           <section className="flex-1">
             <h2 className="text-2xl font-black mb-4 text-slate-800 dark:text-slate-200 tracking-tight">{t("seo.twosComplement.title")}</h2>
-            <p className="mb-4 leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: t("seo.twosComplement.p1") }} />
+            <p className="mb-4 leading-relaxed text-lg"><Trans i18nKey="seo.twosComplement.p1" /></p>
             <ul className="list-disc pl-5 space-y-2 leading-relaxed opacity-80">
-              <li dangerouslySetInnerHTML={{ __html: t("seo.twosComplement.unsigned") }} />
-              <li dangerouslySetInnerHTML={{ __html: t("seo.twosComplement.signed") }} />
+              <li><Trans i18nKey="seo.twosComplement.unsigned" /></li>
+              <li><Trans i18nKey="seo.twosComplement.signed" /></li>
             </ul>
           </section>
           <div className="flex-1 w-full bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-6 rounded-3xl border border-white/40 dark:border-slate-800/60 shadow-xl shadow-slate-200/20 dark:shadow-none">
@@ -44,11 +44,11 @@ export default function SEOContent() {
         <div className="flex flex-col md:flex-row items-center gap-8">
           <section className="flex-1">
             <h2 className="text-2xl font-black mb-4 text-slate-800 dark:text-slate-200 tracking-tight">{t("seo.bitWidths.title")}</h2>
-            <p className="mb-4 leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: t("seo.bitWidths.p1") }} />
+            <p className="mb-4 leading-relaxed text-lg"><Trans i18nKey="seo.bitWidths.p1" /></p>
             <ul className="list-disc pl-5 space-y-2 leading-relaxed text-sm opacity-80">
-              <li dangerouslySetInnerHTML={{ __html: t("seo.bitWidths.8bit") }} />
-              <li dangerouslySetInnerHTML={{ __html: t("seo.bitWidths.16bit") }} />
-              <li dangerouslySetInnerHTML={{ __html: t("seo.bitWidths.32bit") }} />
+              <li><Trans i18nKey="seo.bitWidths.8bit" /></li>
+              <li><Trans i18nKey="seo.bitWidths.16bit" /></li>
+              <li><Trans i18nKey="seo.bitWidths.32bit" /></li>
             </ul>
           </section>
           <div className="flex-1 w-full bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-6 rounded-3xl border border-white/40 dark:border-slate-800/60 shadow-xl shadow-slate-200/20 dark:shadow-none">

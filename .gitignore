@@ -139,3 +139,9 @@ Thumbs.db
 old_README.md
 ROADMAP_DEVOPS.md
 LEARNING_PROGRESS.md
+
+# Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
+
+# Ignore Archive folder containing screenshot of past versions
+Archive

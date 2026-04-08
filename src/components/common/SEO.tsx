@@ -32,6 +32,25 @@ export default function SEO() {
       <link rel="alternate" hrefLang="en" href={`${siteOrigin}/`} />
       <link rel="alternate" hrefLang="zh" href={`${siteOrigin}/zh`} />
       <link rel="alternate" hrefLang="x-default" href={`${siteOrigin}/`} />
+
+      {/* Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Flibit Converter",
+          "url": canonicalUrl,
+          "applicationCategory": "EducationalApplication, Utilities",
+          "genre": "Binary Converter, Programming Tool",
+          "browserRequirements": "Requires JavaScript",
+          "description": t("head.description"),
+          "operatingSystem": "Web-based",
+          "author": {
+            "@type": "Person",
+            "name": "Steven Ji"
+          }
+        })}
+      </script>
     </Helmet>
   );
 }

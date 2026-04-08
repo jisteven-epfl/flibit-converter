@@ -77,4 +77,13 @@ describe("SEO component", () => {
       `${window.location.origin}/`,
     );
   });
+
+  it("injects dynamic JSON-LD schema", () => {
+    renderSEO("/");
+    const script = document.querySelector("script[type='application/ld+json']");
+    expect(script).not.toBeNull();
+    const ld = JSON.parse(script!.innerHTML);
+    expect(ld["@type"]).toBe("WebApplication");
+    expect(ld["url"]).toBe(`${window.location.origin}/`);
+  });
 });

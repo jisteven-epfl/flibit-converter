@@ -16,8 +16,8 @@ function renderSEO(initialPath = "/") {
 }
 
 describe("SEO component", () => {
-  beforeEach(() => {
-    i18n.changeLanguage("en");
+  beforeEach(async () => {
+    await i18n.changeLanguage("en");
   });
 
   it("renders English title when language is 'en'", () => {
@@ -27,8 +27,8 @@ describe("SEO component", () => {
     );
   });
 
-  it("renders Chinese title when language is 'zh'", () => {
-    i18n.changeLanguage("zh");
+  it("renders Chinese title when language is 'zh'", async () => {
+    await i18n.changeLanguage("zh");
     renderSEO("/zh");
     expect(document.title).toBe(
       "Flibit | 二进制、八进制与十六进制转换器",
@@ -41,8 +41,8 @@ describe("SEO component", () => {
     expect(meta?.getAttribute("content")).toContain("intuitive");
   });
 
-  it("renders meta description in Chinese", () => {
-    i18n.changeLanguage("zh");
+  it("renders meta description in Chinese", async () => {
+    await i18n.changeLanguage("zh");
     renderSEO("/zh");
     const meta = document.querySelector("meta[name='description']");
     expect(meta?.getAttribute("content")).toContain("直观、交互式的进制转换工具");
@@ -58,7 +58,23 @@ describe("SEO component", () => {
     expect(hreflangZh).not.toBeNull();
     expect(hreflangDefault).not.toBeNull();
     expect(hreflangZh?.getAttribute("href")).toBe(
-      "https://flibit-converter.vercel.app/zh",
+      `${window.location.origin}/zh`,
+    );
+  });
+
+  it("sets route-aware canonical URL for /zh", () => {
+    renderSEO("/zh");
+    const canonical = document.querySelector("link[rel='canonical']");
+    expect(canonical?.getAttribute("href")).toBe(
+      `${window.location.origin}/zh`,
+    );
+  });
+
+  it("sets canonical URL for root route", () => {
+    renderSEO("/");
+    const canonical = document.querySelector("link[rel='canonical']");
+    expect(canonical?.getAttribute("href")).toBe(
+      `${window.location.origin}/`,
     );
   });
 });

@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
 
 export default function SEO() {
   const { t, i18n } = useTranslation();

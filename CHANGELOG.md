@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-04-08
+
+### Added
+
+- **URL-Based i18n Routing**: Introduced `react-router-dom` to support dedicated language subpaths (`/` for English, `/zh` for Chinese), replacing the previous `localStorage`-only approach. GoogleBot can now independently crawl and index both language versions.
+- **Dynamic Meta Tag Injection**: Integrated `react-helmet-async` to dynamically update `<title>`, `<meta name="description">`, Open Graph, and Twitter Card tags per locale via a new `SEO` component.
+- **Hreflang Tags**: Added `<link rel="alternate" hreflang>` tags to signal language variants to Google, preventing duplicate content penalties.
+- **SEO Component Tests**: New `SEO.test.tsx` suite verifying that localized titles, descriptions, and hreflang links render correctly per route.
+- **Updated Sitemap**: Expanded `sitemap.xml` with `xhtml:link` hreflang annotations for both `/` and `/zh` URLs per Google's XML sitemap specification.
+
+### Changed
+
+- **Search Result Snippets**: Updated English and Chinese `head.title` and `head.description` translation keys to feature a cleaner, keyword-richer copy (Octal, Hexadecimal, intuitive) optimized for Google SERP display.
+- **Language Switcher**: Updated `LanguageSwitcher` to use `navigate()` from React Router so switching language also changes the URL, ensuring consistency between the visible URL and the active locale.
+- **i18n Detection Order**: Reworked `detectInitialLanguage()` to prioritize URL path → `localStorage` → browser language, ensuring the correct locale is always loaded from the URL on first visit.
+- **Test Infrastructure**: Fixed `App.test.tsx` and `LanguageSwitcher.test.tsx` to wrap renders in `MemoryRouter` + `HelmetProvider`, restoring all 40 passing tests after the router introduction.
+
 ## [2.4.0] - 2026-04-07
 
 ### Added

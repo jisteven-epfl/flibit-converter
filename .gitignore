@@ -116,15 +116,6 @@ dist
 
 .vscode
 
-# AI Context
-.cobridge
-
-# .traerules
-.traerules
-
-# .cursorrules
-.cursorrules
-
 # GitHub Copilot Instructions
 .github/copilot-instructions.md
 .DS_Store
@@ -132,6 +123,7 @@ dist
 # Vite / Local env files
 .env*.local
 .vite/
+
 # Windows
 Thumbs.db
 
@@ -146,3 +138,7 @@ DESIGN_DOCUMENT.md
 
 # Ignore Archive folder containing screenshot of past versions
 Archive
+
+# Ignore workflow files and skills, rules
+.agents
+

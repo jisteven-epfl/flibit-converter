@@ -280,7 +280,7 @@ describe("App Integration", () => {
 
   it("should cycle through multi-base modes (DEC -> BIN -> OCT -> HEX) and sync inputs", async () => {
     renderApp();
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, "10"); // 10 decimal
     expect(useFlibitStore.getState().bitPattern).toBe(10n);

@@ -31,7 +31,13 @@ describe("SEO component", () => {
     i18n.changeLanguage("zh");
     renderSEO("/zh");
     expect(document.title).toBe(
-      "Flibit 转换器 | 交互式在线二进制与比特翻转工具",
+  it("renders Chinese title when language is 'zh'", () => {
+    i18n.changeLanguage("zh");
+    renderSEO("/zh");
+    expect(document.title).toBe(
+      "Flibit | 二进制、八进制与十六进制转换器",
+    );
+  });
     );
   });
 

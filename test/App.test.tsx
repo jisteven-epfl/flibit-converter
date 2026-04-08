@@ -125,7 +125,7 @@ describe("App Integration", () => {
 
   it("should validate InputArea logic correctly", async () => {
     renderApp();
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
 
     // Try an input too big for 8-bit unsigned (max 255)
     await user.clear(input);
@@ -214,7 +214,7 @@ describe("App Integration", () => {
     });
 
     renderApp();
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, "42");
 

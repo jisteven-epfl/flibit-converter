@@ -31,13 +31,7 @@ describe("SEO component", () => {
     i18n.changeLanguage("zh");
     renderSEO("/zh");
     expect(document.title).toBe(
-  it("renders Chinese title when language is 'zh'", () => {
-    i18n.changeLanguage("zh");
-    renderSEO("/zh");
-    expect(document.title).toBe(
       "Flibit | 二进制、八进制与十六进制转换器",
-    );
-  });
     );
   });
 

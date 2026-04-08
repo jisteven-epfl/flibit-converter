@@ -26,7 +26,7 @@ describe("App Integration", () => {
   it("should render main components", () => {
     render(<App />);
     expect(screen.getAllByText(/Flibit/i)[0]).toBeInTheDocument();
-    expect(screen.getByLabelText(/Decimal Value/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Decimal Input/i)).toBeInTheDocument();
     expect(screen.getByText(/Binary Result/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /8-bit/i })).toBeInTheDocument();
   });
@@ -44,7 +44,7 @@ describe("App Integration", () => {
     await user.click(bit0Button);
 
     // The input should update to 1
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     expect(input.value).toBe("1");
 
     // Bit 0 should now be toggled to 1
@@ -71,7 +71,7 @@ describe("App Integration", () => {
     await user.click(bit0Button);
 
     // Input should update to 1
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     expect(input.value).toBe("1");
 
     // Click bit 0 again
@@ -94,7 +94,7 @@ describe("App Integration", () => {
 
   it("should reset bitPattern to 0 when input is cleared", async () => {
     render(<App />);
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
 
     // Type a non-zero value so bits are set
     await user.type(input, "42");
@@ -113,7 +113,7 @@ describe("App Integration", () => {
 
   it("should validate InputArea logic correctly", async () => {
     render(<App />);
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
 
     // Try an input too big for 8-bit unsigned (max 255)
     await user.clear(input);
@@ -202,7 +202,7 @@ describe("App Integration", () => {
     });
 
     render(<App />);
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, "42");
 
@@ -262,13 +262,13 @@ describe("App Integration", () => {
     fireEvent.mouseEnter(bit0Button, { buttons: 1 });
     fireEvent.mouseEnter(bit1Button, { buttons: 1 });
 
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     expect(input.value).toBe("3"); // Bit 0 (1) + Bit 1 (2) = 3
   });
 
   it("should cycle through multi-base modes (DEC -> BIN -> OCT -> HEX) and sync inputs", async () => {
     render(<App />);
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, "10"); // 10 decimal
     expect(useFlibitStore.getState().bitPattern).toBe(10n);

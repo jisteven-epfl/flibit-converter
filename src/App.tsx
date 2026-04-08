@@ -4,8 +4,10 @@ import Header from "./components/layout/Header";
 import MainCard from "./components/layout/MainCard";
 import { useFlibitDerived, useFlibitStore } from "./store/useFlibitStore";
 import SEOContent from "./components/layout/SEOContent";
+import SEO from "./components/common/SEO";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-function App() {
+function MainApp() {
   const { t } = useTranslation();
   
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
@@ -98,4 +100,28 @@ function App() {
   );
 }
 
-export default App;
+
+export default function App() {
+  const location = useLocation();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    const pathLang = location.pathname.split("/")[1];
+    if (pathLang === "zh" && i18n.language !== "zh") {
+      i18n.changeLanguage("zh");
+    } else if (pathLang !== "zh" && i18n.language !== "en") {
+      i18n.changeLanguage("en");
+    }
+  }, [location.pathname, i18n]);
+
+  return (
+    <>
+      <SEO />
+      <Routes>
+        <Route path="/zh" element={<MainApp />} />
+        <Route path="/" element={<MainApp />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
+  );
+}

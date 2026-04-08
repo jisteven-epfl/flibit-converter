@@ -87,5 +87,9 @@
   },
   "languageSwitcher": {
     "label": "Language"
+  },
+  "head": {
+    "title": "Flibit | Binary, Octal & Hex Converter",
+    "description": "An intuitive, interactive binary converter. Flip bits visually, convert between Decimal, Binary, Octal & Hexadecimal, and explore Two's Complement in real-time."
   }
 }

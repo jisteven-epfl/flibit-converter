@@ -1,12 +1,21 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { SUPPORTED_LANGUAGES, STORAGE_KEY, type LanguageCode } from "../../i18n/config";
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n, t } = useTranslation();
   const currentLang = i18n.language as LanguageCode;
+  const navigate = useNavigate();
 
   const handleChange = (lang: LanguageCode) => {
+    // 1. Set the router path
+    if (lang === "zh") {
+      navigate("/zh");
+    } else {
+      navigate("/");
+    }
+    // 2. We can still save to localStorage as a fallback
     i18n.changeLanguage(lang);
     localStorage.setItem(STORAGE_KEY, lang);
   };

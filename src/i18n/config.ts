@@ -14,10 +14,30 @@ export type LanguageCode = (typeof SUPPORTED_LANGUAGES)[number]["code"];
 const STORAGE_KEY = "flibit-language";
 
 function detectInitialLanguage(): LanguageCode {
+  const isBrowser =
+    typeof window !== "undefined" &&
+    typeof window.location !== "undefined" &&
+    typeof localStorage !== "undefined" &&
+    typeof navigator !== "undefined";
+
+  if (!isBrowser) {
+    return "en";
+  }
+
+  // 1. URL Path priority
+  const pathLang = window.location.pathname.split("/")[1] as
+    | LanguageCode
+    | undefined;
+  if (pathLang && SUPPORTED_LANGUAGES.some(function(l) { return l.code === pathLang })) {
+    return pathLang;
+  }
+
+  // 2. Local Storage
   const saved = localStorage.getItem(STORAGE_KEY) as LanguageCode | null;
   if (saved && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
     return saved;
   }
+  // 3. Browser Language
   const browserLang = navigator.language.split("-")[0] as LanguageCode;
   if (SUPPORTED_LANGUAGES.some((l) => l.code === browserLang)) {
     return browserLang;

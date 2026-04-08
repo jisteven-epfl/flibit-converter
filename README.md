@@ -35,6 +35,7 @@ The name **Flibit** comes from the term "bit flip" (a hardware phenomenon where 
 ### ✨ Features
 
 - **8 / 16 / 32-Bit Modes**: Seamlessly switch between different bit lengths.
+- **Multi-Base Conversion**: Convert between Decimal, Binary, Octal, and Hexadecimal in real-time.
 - **Signed & Unsigned Support**: Real-time Two's Complement logic for signed integers.
 - **Dark Mode Support**: Built-in dark mode making late-night debugging easier on the eyes.
 - **Swipe-to-Toggle**: Click or natively swipe across bits to effortlessly paint bit patterns instead of clicking one by one.
@@ -42,6 +43,7 @@ The name **Flibit** comes from the term "bit flip" (a hardware phenomenon where 
 - **Mathematical Overflow Protection**: Custom reduce logic bypassing JavaScript's native 32-bit signed bitwise limits to safely compute large unsigned integers.
 - **A11y Compliant**: Full keyboard navigation, ARIA labels, and live screen reader support for error states.
 - **Responsive Card UI**: A beautifully polished, stable layout built with Tailwind CSS that prevents UI jittering during scrollbar or placeholder changes.
+- **Multilingual SEO (EN & ZH)**: Dedicated URL routes (`/` and `/zh`) with dynamic localized meta titles, descriptions, and `hreflang` tags for optimized Google indexing in both English and Chinese.
 
 ### 🚀 Getting Started
 
@@ -81,6 +83,7 @@ Furthermore, this project serves as an exploration into **AI-native workflows**.
 ### ✨ 核心功能
 
 - **8 / 16 / 32 位架构支持**: 无缝切换不同位长度的数据表示。
+- **多进制转换**: 在十进制、二进制、八进制与十六进制之间实时互转。
 - **有符号与无符号整数**: 实时支持基于补码（Two's Complement）的负数逻辑。
 - **暗色模式支持 (Dark Mode)**: 内置暗色模式，降低深夜调试代码时的视觉疲劳。
 - **丝滑的涂鸦模式 (Swipe-to-Toggle)**: 按住鼠标在方块上划过即可连续翻转位状态，告别繁琐的单点操作。
@@ -88,6 +91,7 @@ Furthermore, this project serves as an exploration into **AI-native workflows**.
 - **数学级溢出保护**: 放弃 JS 原生的 32位有符号位移限制，改用纯数学逻辑计算，安全处理大额无符号整数。
 - **无障碍访问 (A11y)**: 完整的键盘导航支持，ARIA 标签，以及支持屏幕阅读器的实时错误播报。
 - **稳固的卡片布局**: 基于 Tailwind CSS 打造的大厂级 UI，完美解决滚动条和占位符变化导致的页面宽度抖动问题。
+- **多语言 SEO 优化**: 通过独立 URL 路由（`/` 英文版与 `/zh` 中文版）实现动态标题、描述与 `hreflang` 标签注入，助力中英文搜索引擎精准收录。
 
 ### 🚀 快速开始
 

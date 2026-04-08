@@ -1,8 +1,20 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import App from "../src/App";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { useFlibitStore } from "../src/store/useFlibitStore";
+
+function renderApp(initialPath = "/") {
+  return render(
+    <HelmetProvider>
+      <MemoryRouter initialEntries={[initialPath]}>
+        <App />
+      </MemoryRouter>
+    </HelmetProvider>,
+  );
+}
 
 describe("App Integration", () => {
   let user: ReturnType<typeof userEvent.setup>;
@@ -24,7 +36,7 @@ describe("App Integration", () => {
   });
 
   it("should render main components", () => {
-    render(<App />);
+    renderApp();
     expect(screen.getAllByText(/Flibit/i)[0]).toBeInTheDocument();
     expect(screen.getByLabelText(/Decimal Input/i)).toBeInTheDocument();
     expect(screen.getByText(/Binary Result/i)).toBeInTheDocument();
@@ -32,7 +44,7 @@ describe("App Integration", () => {
   });
 
   it("should toggle bits correctly on click (Flip mode)", async () => {
-    render(<App />);
+    renderApp();
 
     // Initial state is 0, so bit 0 should have label '0' inside the front face text
     // We'll target the button by aria-label
@@ -58,7 +70,7 @@ describe("App Integration", () => {
   });
 
   it("should add values correctly on click (Add mode)", async () => {
-    render(<App />);
+    renderApp();
 
     // Switch to 'add' mode
     const addModeButton = screen.getByRole("button", { name: /^add$/i });
@@ -93,7 +105,7 @@ describe("App Integration", () => {
   });
 
   it("should reset bitPattern to 0 when input is cleared", async () => {
-    render(<App />);
+    renderApp();
     const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
 
     // Type a non-zero value so bits are set
@@ -112,7 +124,7 @@ describe("App Integration", () => {
   });
 
   it("should validate InputArea logic correctly", async () => {
-    render(<App />);
+    renderApp();
     const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
 
     // Try an input too big for 8-bit unsigned (max 255)
@@ -161,7 +173,7 @@ describe("App Integration", () => {
   });
 
   it("should toggle theme and persist to localStorage", async () => {
-    render(<App />);
+    renderApp();
 
     // Find the theme toggle button
     const themeBtn = screen.getByTitle(/Switch to (dark|light) mode/i);
@@ -179,7 +191,7 @@ describe("App Integration", () => {
   });
 
   it("should handle 16-bit mode and show Byte labels", async () => {
-    render(<App />);
+    renderApp();
 
     // Switch to 16-bit mode
     const bit16Button = screen.getByRole("button", { name: /16-bit/i });
@@ -201,7 +213,7 @@ describe("App Integration", () => {
       configurable: true,
     });
 
-    render(<App />);
+    renderApp();
     const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, "42");
@@ -220,7 +232,7 @@ describe("App Integration", () => {
   });
 
   it("should not jitter layout when toggling TYPE or ACTION buttons (border always present)", async () => {
-    render(<App />);
+    renderApp();
 
     // TYPE buttons: "unsigned" is active by default, "signed" is inactive
     const unsignedBtn = screen.getByRole("button", { name: /^unsigned$/i });
@@ -249,7 +261,7 @@ describe("App Integration", () => {
   });
 
   it("should simulate swipe-to-toggle logic", () => {
-    render(<App />);
+    renderApp();
 
     const bit0Button = screen.getByRole("button", {
       name: "Bit 0, value is 0",
@@ -267,7 +279,7 @@ describe("App Integration", () => {
   });
 
   it("should cycle through multi-base modes (DEC -> BIN -> OCT -> HEX) and sync inputs", async () => {
-    render(<App />);
+    renderApp();
     const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, "10"); // 10 decimal

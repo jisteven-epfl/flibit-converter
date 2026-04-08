@@ -3,10 +3,34 @@ import { useTranslation } from "react-i18next";
 import { useFlibitStore, useFlibitDerived } from "../../store/useFlibitStore";
 
 const baseConfig = {
-  10: { text: "text-blue-500", border: "border-blue-300 dark:border-blue-500/50", ring: "focus:ring-blue-300", label: "DEC", prefix: "" },
-  2:  { text: "text-purple-500", border: "border-purple-300 dark:border-purple-500/50", ring: "focus:ring-purple-300", label: "BIN", prefix: "" },
-  8:  { text: "text-pink-500", border: "border-pink-300 dark:border-pink-500/50", ring: "focus:ring-pink-300", label: "OCT", prefix: "" },
-  16: { text: "text-orange-500", border: "border-orange-300 dark:border-orange-500/50", ring: "focus:ring-orange-300", label: "HEX", prefix: "" },
+  10: {
+    text: "text-blue-500",
+    border: "border-blue-300 dark:border-blue-500/50",
+    ring: "focus:ring-blue-300",
+    label: "DEC",
+    prefix: "",
+  },
+  2: {
+    text: "text-purple-500",
+    border: "border-purple-300 dark:border-purple-500/50",
+    ring: "focus:ring-purple-300",
+    label: "BIN",
+    prefix: "",
+  },
+  8: {
+    text: "text-pink-500",
+    border: "border-pink-300 dark:border-pink-500/50",
+    ring: "focus:ring-pink-300",
+    label: "OCT",
+    prefix: "",
+  },
+  16: {
+    text: "text-orange-500",
+    border: "border-orange-300 dark:border-orange-500/50",
+    ring: "focus:ring-orange-300",
+    label: "HEX",
+    prefix: "",
+  },
 };
 
 const InputArea: React.FC = () => {
@@ -39,7 +63,7 @@ const InputArea: React.FC = () => {
     if (currentBase === 10) nextBase = 2;
     else if (currentBase === 2) nextBase = 8;
     else if (currentBase === 8) nextBase = 16;
-    
+
     setCurrentBase(nextBase);
 
     // Trigger bouncy effect
@@ -84,30 +108,35 @@ const InputArea: React.FC = () => {
           htmlFor="multi-base-input"
           className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider pl-1"
         >
-          {t("inputArea.label", { base: t(`inputArea.baseName.${currentBase}`, currentConfig.label) })}
+          {t("inputArea.label", {
+            base: t(`inputArea.baseName.${currentBase}`, currentConfig.label),
+          })}
         </label>
         <button
           onClick={handleCopy}
           className="text-[10px] font-bold text-blue-400 hover:text-blue-500 dark:text-blue-500 dark:hover:text-blue-400 transition-colors uppercase tracking-tight cursor-pointer pr-1"
         >
-          {copied ? t("inputArea.copied", "Copied!") : t("inputArea.copy", "Copy")}
+          {copied
+            ? t("inputArea.copied", "Copied!")
+            : t("inputArea.copy", "Copy")}
         </button>
       </div>
 
       <div className={wrapperClassName}>
         {/* The Base Cycler Button */}
         <div className="relative pl-2 py-1 pr-1 border-r border-slate-200 dark:border-slate-700 flex items-center justify-center">
-          <button 
+          <button
             onClick={cycleBase}
             className={`
               relative flex items-center justify-center h-10 w-20 px-2 rounded-lg 
               bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 
-              transition-colors duration-200 font-black tracking-widest uppercase
+              transition-all duration-200 font-black tracking-widest uppercase
+              active:scale-90
               ${currentConfig.text}
               ${isBouncing ? "scale-110 shadow-lg shadow-current/20" : "scale-100"}
             `}
           >
-             {currentConfig.label}
+            {currentConfig.label}
           </button>
         </div>
 

@@ -45,7 +45,7 @@ describe("SEO component", () => {
     i18n.changeLanguage("zh");
     renderSEO("/zh");
     const meta = document.querySelector("meta[name='description']");
-    expect(meta?.getAttribute("content")).toContain("二进制转换器");
+    expect(meta?.getAttribute("content")).toContain("直观、交互式的进制转换工具");
   });
 
   it("includes hreflang alternate links for both locales", () => {

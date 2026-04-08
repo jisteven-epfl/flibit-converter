@@ -232,7 +232,7 @@ describe("App Integration", () => {
   });
 
   it("should not jitter layout when toggling TYPE or ACTION buttons (border always present)", async () => {
-    render(<App />);
+    renderApp();
 
     // TYPE buttons: "unsigned" is active by default, "signed" is inactive
     const unsignedBtn = screen.getByRole("button", { name: /^unsigned$/i });

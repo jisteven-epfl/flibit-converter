@@ -155,7 +155,7 @@ const BitButton: React.FC<BitButtonProps> = ({
                 >
                     {/* Front Face (0) */}
                     <div
-                        className="w-full h-full absolute top-0 left-0 flex items-center justify-center rounded-lg font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 group-active:scale-95 transition-transform"
+                        className="w-full h-full absolute top-0 left-0 flex items-center justify-center rounded-lg font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 transition-transform"
                         style={{ backfaceVisibility: 'hidden' }}
                     >
                         0
@@ -163,7 +163,7 @@ const BitButton: React.FC<BitButtonProps> = ({
 
                     {/* Back Face (1) */}
                     <div
-                        className="w-full h-full absolute top-0 left-0 flex items-center justify-center rounded-lg font-mono font-bold bg-blue-300 dark:bg-blue-600 text-white group-active:scale-95 transition-transform shadow-[0_0_15px_rgba(147,197,253,0.3)] dark:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
+                        className="w-full h-full absolute top-0 left-0 flex items-center justify-center rounded-lg font-mono font-bold bg-blue-300 dark:bg-blue-600 text-white transition-transform shadow-[0_0_15px_rgba(147,197,253,0.3)] dark:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
                         style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                     >
                         1

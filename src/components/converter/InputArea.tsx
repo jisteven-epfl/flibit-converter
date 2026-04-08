@@ -84,7 +84,7 @@ const InputArea: React.FC = () => {
           htmlFor="multi-base-input"
           className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider pl-1"
         >
-          {t("inputArea.label", { base: currentConfig.label, defaultValue: "{{base}} Input" })}
+          {t("inputArea.label", { base: t(`inputArea.baseName.${currentBase}`, currentConfig.label) })}
         </label>
         <button
           onClick={handleCopy}
@@ -102,8 +102,7 @@ const InputArea: React.FC = () => {
             className={`
               relative flex items-center justify-center h-10 w-20 px-2 rounded-lg 
               bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 
-              transition-all duration-200 font-black tracking-widest uppercase
-              active:scale-90
+              transition-colors duration-200 font-black tracking-widest uppercase
               ${currentConfig.text}
               ${isBouncing ? "scale-110 shadow-lg shadow-current/20" : "scale-100"}
             `}

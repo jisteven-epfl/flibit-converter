@@ -38,7 +38,7 @@ describe("App Integration", () => {
   it("should render main components", () => {
     renderApp();
     expect(screen.getAllByText(/Flibit/i)[0]).toBeInTheDocument();
-    expect(screen.getByLabelText(/Decimal Value/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Decimal Input/i)).toBeInTheDocument();
     expect(screen.getByText(/Binary Result/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /8-bit/i })).toBeInTheDocument();
   });
@@ -56,7 +56,7 @@ describe("App Integration", () => {
     await user.click(bit0Button);
 
     // The input should update to 1
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     expect(input.value).toBe("1");
 
     // Bit 0 should now be toggled to 1
@@ -83,7 +83,7 @@ describe("App Integration", () => {
     await user.click(bit0Button);
 
     // Input should update to 1
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     expect(input.value).toBe("1");
 
     // Click bit 0 again
@@ -231,6 +231,35 @@ describe("App Integration", () => {
     expect(mockWriteText).toHaveBeenCalledWith("00101010");
   });
 
+  it("should not jitter layout when toggling TYPE or ACTION buttons (border always present)", async () => {
+    render(<App />);
+
+    // TYPE buttons: "unsigned" is active by default, "signed" is inactive
+    const unsignedBtn = screen.getByRole("button", { name: /^unsigned$/i });
+    const signedBtn = screen.getByRole("button", { name: /^signed$/i });
+
+    // Both active and inactive buttons must always carry a border class
+    expect(unsignedBtn.className).toMatch(/border/);
+    expect(signedBtn.className).toMatch(/border/);
+
+    // Click "signed" — it becomes active; "unsigned" becomes inactive
+    await user.click(signedBtn);
+    expect(signedBtn.className).toMatch(/border/);
+    expect(unsignedBtn.className).toMatch(/border/);
+
+    // ACTION buttons: "flip" is active by default, "add" is inactive
+    const flipBtn = screen.getByRole("button", { name: /^flip$/i });
+    const addBtn = screen.getByRole("button", { name: /^add$/i });
+
+    expect(flipBtn.className).toMatch(/border/);
+    expect(addBtn.className).toMatch(/border/);
+
+    // Click "add" — it becomes active; "flip" becomes inactive
+    await user.click(addBtn);
+    expect(addBtn.className).toMatch(/border/);
+    expect(flipBtn.className).toMatch(/border/);
+  });
+
   it("should simulate swipe-to-toggle logic", () => {
     renderApp();
 
@@ -245,7 +274,7 @@ describe("App Integration", () => {
     fireEvent.mouseEnter(bit0Button, { buttons: 1 });
     fireEvent.mouseEnter(bit1Button, { buttons: 1 });
 
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
     expect(input.value).toBe("3"); // Bit 0 (1) + Bit 1 (2) = 3
   });
 

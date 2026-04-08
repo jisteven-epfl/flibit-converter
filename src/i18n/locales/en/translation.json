@@ -7,7 +7,13 @@
     }
   },
   "inputArea": {
-    "label": "Decimal Value",
+    "label": "{{base}} Input",
+    "baseName": {
+      "10": "Decimal",
+      "2": "Binary",
+      "8": "Octal",
+      "16": "Hexadecimal"
+    },
     "copy": "Copy",
     "copied": "✓ Copied!",
     "placeholder": "Type an integer from {{min}} to {{max}}"

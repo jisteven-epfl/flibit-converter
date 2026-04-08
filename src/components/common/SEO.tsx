@@ -16,8 +16,8 @@ export default function SEO() {
       <meta property="og:description" content={t("head.description")} />
 
       {/* Twitter Tags */}
-      <meta property="twitter:title" content={t("head.title")} />
-      <meta property="twitter:description" content={t("head.description")} />
+      <meta name="twitter:title" content={t("head.title")} />
+      <meta name="twitter:description" content={t("head.description")} />
       
       {/* Hreflang Tags for SEO */}
       <link rel="alternate" hrefLang="en" href="https://flibit-converter.vercel.app/" />

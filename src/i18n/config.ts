@@ -28,7 +28,7 @@ function detectInitialLanguage(): LanguageCode {
   const pathLang = window.location.pathname.split("/")[1] as
     | LanguageCode
     | undefined;
-  if (pathLang && SUPPORTED_LANGUAGES.some((l) => l.code === pathLang)) {
+  if (pathLang && SUPPORTED_LANGUAGES.some(function(l) { return l.code === pathLang })) {
     return pathLang;
   }
 

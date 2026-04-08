@@ -17,9 +17,10 @@ function detectInitialLanguage(): LanguageCode {
   // 1. URL Path priority
   if (typeof window !== "undefined") {
     const pathLang = window.location.pathname.split("/")[1];
-    if (SUPPORTED_LANGUAGES.some(function(l) { return l.code === pathLang })) {
+    if (SUPPORTED_LANGUAGES.some((l) => l.code === pathLang)) {
       return pathLang as LanguageCode;
     }
+    if (pathLang === "") return "en";
   }
 
   // 2. Local Storage

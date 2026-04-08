@@ -106,7 +106,7 @@ describe("App Integration", () => {
 
   it("should reset bitPattern to 0 when input is cleared", async () => {
     renderApp();
-    const input = screen.getByLabelText(/Decimal Value/i) as HTMLInputElement;
+    const input = screen.getByLabelText(/Decimal Input/i) as HTMLInputElement;
 
     // Type a non-zero value so bits are set
     await user.type(input, "42");

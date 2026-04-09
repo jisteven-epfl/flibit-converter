@@ -1,4 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Anta&family=Geist+Mono:wght@100..900&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-anta: "Anta", sans-serif;
+  --font-sans: "Geist Mono", sans-serif;
+}
 
 @custom-variant dark (&:where(.dark, .dark *));
 

@@ -1,7 +1,6 @@
-
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../common/LanguageSwitcher';
-import { FlipBitInteractive } from '../common/interactive_logo';
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../common/LanguageSwitcher";
+import { FlipBitInteractive } from "../common/interactive_logo";
 
 interface HeaderProps {
   isDarkMode: boolean;
@@ -14,22 +13,23 @@ export default function Header({ isDarkMode, setIsDarkMode }: HeaderProps) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full bg-blue-500/80 dark:bg-blue-900/80 backdrop-blur-lg shadow-md border-b border-blue-400/30 dark:border-blue-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        
         {/* Left Side: Logo & Title */}
         <div className="flex items-baseline gap-4">
           <div className="mt-2">
             <FlipBitInteractive sizeClass="w-[32px]" />
           </div>
-          <a 
+          <a
             href="#"
             onClick={(e) => {
               e.preventDefault();
-window?.scrollTo({ top: 0, behavior: 'smooth' });
+              window?.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="font-extrabold text-white text-3xl tracking-tight leading-none relative -top-3 cursor-pointer select-none"
+            className="font-extrabold font-anta text-white text-3xl leading-none relative -top-3 cursor-pointer select-none"
           >
             <span>Flibit</span>
-            <span className="ml-[8px] hidden sm:inline-block font-medium opacity-80 text-3xl">converter</span>
+            <span className="ml-[8px] hidden sm:inline-block font-medium opacity-80 text-3xl">
+              converter
+            </span>
           </a>
         </div>
 
@@ -62,20 +62,55 @@ window?.scrollTo({ top: 0, behavior: 'smooth' });
           <button
             onClick={() => setIsDarkMode(!isDarkMode)}
             className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/10"
-            title={isDarkMode ? t("header.themeToggle.toLight") : t("header.themeToggle.toDark")}
+            title={
+              isDarkMode
+                ? t("header.themeToggle.toLight")
+                : t("header.themeToggle.toDark")
+            }
             aria-label="Toggle Theme"
           >
             {isDarkMode ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M22 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.93 4.93 1.41 1.41" />
+                <path d="m17.66 17.66 1.41 1.41" />
+                <path d="M2 12h2" />
+                <path d="M22 12h2" />
+                <path d="m6.34 17.66-1.41 1.41" />
+                <path d="m19.07 4.93-1.41 1.41" />
+              </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+              </svg>
             )}
           </button>
 
           <div className="h-5 w-px bg-white/20 rounded hidden sm:block"></div>
 
           <LanguageSwitcher />
-
         </div>
       </div>
     </header>
